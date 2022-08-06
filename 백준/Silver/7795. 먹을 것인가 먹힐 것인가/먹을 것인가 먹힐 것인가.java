@@ -24,7 +24,7 @@ public class Main {
                 arrB[i] = Integer.parseInt(st.nextToken());
             }
 
-            Arrays.sort(arrA);
+//            Arrays.sort(arrA);
             Arrays.sort(arrB);
 
             int cnt = 0;
