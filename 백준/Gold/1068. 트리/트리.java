@@ -35,15 +35,11 @@ public class Main {
 
         m = Integer.parseInt(br.readLine());
 
-//        System.out.println(nodes);
-
         for (int i : roots) {
             dfs(i);
-//            System.out.println(Arrays.toString(visited));
             if (visited[i] != 2) {
                 dfsCheck(i, i);
             }
-//            System.out.println(Arrays.toString(visited));
         }
 
         bw.write(cnt + "\n");
@@ -63,7 +59,7 @@ public class Main {
                 tmp++;
             }
         }
-        if ((tmp == 0)) {
+        if (tmp == 0) {
             cnt++;
         } else {
             for (int x : nodes.get(start)) {
@@ -79,10 +75,6 @@ public class Main {
         if (start == m) {
             cut(start);
         }
-//        if (nodes.get(start).size() == 1 && visited[start] != 2) {
-//            cnt++;
-//        }
-
         for (int x : nodes.get(start)) {
             if (visited[x] == 0) {
                 dfs(x);
@@ -91,7 +83,6 @@ public class Main {
     }
 
     static void cut(int start) {
-//        System.out.println(start);
         visited[start] = 2;
 
         for (int x : nodes.get(start)) {
