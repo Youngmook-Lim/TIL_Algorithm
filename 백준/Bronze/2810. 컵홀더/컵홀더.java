@@ -5,6 +5,7 @@ public class Main {
 
     static int n;
     static String seats;
+    static int cnt = 1;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,20 +14,21 @@ public class Main {
 
         n = Integer.parseInt(br.readLine());
         seats = br.readLine();
-        int num = n;
-        boolean flag = false;
 
         for (int i = 0; i < n; i++) {
             if (seats.charAt(i) == 'L') {
-                num--;
+                cnt++;
                 i++;
-                flag = true;
+            } else {
+                cnt++;
             }
         }
 
-        if (flag) num++;
-
-        bw.write(num + "\n");
+        if (cnt > n) {
+            bw.write(n + "\n");
+        } else {
+            bw.write(cnt + "\n");
+        }
 
         bw.flush();
         bw.close();
