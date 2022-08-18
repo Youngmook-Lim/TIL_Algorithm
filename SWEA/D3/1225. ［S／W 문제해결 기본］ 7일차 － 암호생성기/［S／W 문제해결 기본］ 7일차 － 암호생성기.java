@@ -14,9 +14,19 @@ public class Solution {
 
             Queue<Integer> q = new LinkedList<>();
             StringTokenizer st = new StringTokenizer(br.readLine());
+            int min = Integer.MAX_VALUE;
 
             for (int i = 0; i < 8; i++) {
-                q.add(Integer.parseInt(st.nextToken()));
+                int x = Integer.parseInt(st.nextToken());
+                q.add(x);
+                if (x < min) {
+                    min = x;
+                }
+            }
+
+            int a = (min % 15 == 0) ? min / 15 - 1 : min / 15;
+            for (int i = 0; i < 8; i++) {
+                q.add(q.poll() - 15 * a);
             }
 
             int counter = 1;
