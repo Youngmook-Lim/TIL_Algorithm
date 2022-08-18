@@ -1,49 +1,49 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
+import java.io.*;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Solution {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//        int T = Integer.parseInt(br.readLine());
-        int T = 10;
-        for (int t = 1; t <= T; t++) {
-            int tt = Integer.parseInt(br.readLine());
-            Stack<Integer> stack = new Stack<>();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        for (int t = 1; t <= 10; t++) {
+            int _ = Integer.parseInt(br.readLine());
+
+            Queue<Integer> q = new LinkedList<>();
             StringTokenizer st = new StringTokenizer(br.readLine());
 
             for (int i = 0; i < 8; i++) {
-                stack.push(Integer.parseInt(st.nextToken()));
+                q.add(Integer.parseInt(st.nextToken()));
             }
 
             int counter = 1;
+
             while (true) {
                 if (counter > 5) {
                     counter = 1;
                 }
-                int tmp = stack.remove(0);
+                int tmp = q.poll();
                 tmp -= counter;
                 if (tmp <= 0) {
-                    stack.push(0);
+                    q.add(0);
                     break;
                 } else {
-                    stack.push(tmp);
+                    q.add(tmp);
                 }
                 counter++;
             }
-            
-            System.out.print("#" + t + " ");
-            for (int i = 0; i < stack.size(); i++) {
-                System.out.print(stack.get(i) + " ");
+
+            bw.write("#" + t + " ");
+            while (!q.isEmpty()) {
+                bw.write(q.poll() + " ");
             }
-            System.out.println();
-
+            bw.write("\n");
+            bw.flush();
         }
-
+        bw.close();
         br.close();
     }
-
 }
