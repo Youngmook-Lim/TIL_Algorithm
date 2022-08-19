@@ -3,14 +3,11 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
+    static final int NUM = 300;
 
-        final int NUM = 300;
+    static int[][] graph = new int[NUM][NUM];
 
-        int[][] graph = new int[NUM][NUM];
+    static void setGraph() {
         graph[1][1] = 1;
 
         for (int i = 1; i < NUM; i++) {
@@ -26,6 +23,16 @@ public class Solution {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        graph = new int[NUM][NUM];
+
+        setGraph();
 
         int T = Integer.parseInt(br.readLine());
 
