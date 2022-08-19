@@ -34,35 +34,30 @@ public class Solution {
             int p = Integer.parseInt(st.nextToken());
             int q = Integer.parseInt(st.nextToken());
 
-            int px = 0;
-            int py = 0;
-            int qx = 0;
-            int qy = 0;
+            int x = 0;
+            int y = 0;
+
+            int cnt = 0;
 
             loop:
             for (int i = 1; i < NUM; i++) {
                 for (int j = 1; j < NUM; j++) {
-                    if (p == graph[i][j]) {
-                        px = j;
-                        py = i;
-                        break loop;
+                    if (p == graph[i][j] || q == graph[i][j]) {
+                        if (p == q) {
+                            x += 2 * j;
+                            y += 2 * i;
+                            cnt += 2;
+                        } else {
+                            x += j;
+                            y += i;
+                            cnt++;
+                        }
+                        if (cnt == 2) {
+                            break loop;
+                        }
                     }
                 }
             }
-
-            loop:
-            for (int i = 1; i < NUM; i++) {
-                for (int j = 1; j < NUM; j++) {
-                    if (q == graph[i][j]) {
-                        qx = j;
-                        qy = i;
-                        break loop;
-                    }
-                }
-            }
-
-            int x = px + qx;
-            int y = py + qy;
 
             bw.write("#" + t + " " + graph[y][x] + "\n");
         }
