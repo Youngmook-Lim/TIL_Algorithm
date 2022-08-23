@@ -6,8 +6,8 @@ public class Main {
     static int n;
     static int m;
     static int[][] lab;
-    static List<Integer[]> zeros;
-    static List<Integer[]> three;
+    static List<int[]> zeros;
+    static List<int[]> three;
     static boolean[][] visited;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
@@ -36,7 +36,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (lab[i][j] == 0) {
-                    zeros.add(new Integer[]{i, j});
+                    zeros.add(new int[]{i, j});
                 }
             }
         }
@@ -51,12 +51,12 @@ public class Main {
 
 
     static void bfs(int i, int j) {
-        Queue<Integer[]> q = new LinkedList<>();
-        q.add(new Integer[]{i, j});
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{i, j});
         visited[i][j] = true;
 
         while (!q.isEmpty()) {
-            Integer[] tmp = q.poll();
+            int[] tmp = q.poll();
             int x = tmp[1];
             int y = tmp[0];
 
@@ -67,7 +67,7 @@ public class Main {
                 if (nx >= 0 && nx < m && ny >= 0 && ny < n && !visited[ny][nx]
                         && (lab[ny][nx] == 0 || lab[ny][nx] == 2)) {
                     visited[ny][nx] = true;
-                    q.add(new Integer[]{ny, nx});
+                    q.add(new int[]{ny, nx});
                 }
             }
         }
@@ -76,7 +76,7 @@ public class Main {
     static void combi(int idx) {
         if (three.size() == 3) {
             for (int i = 0; i < 3; i++) {
-                lab[Arrays.asList(three.get(i)).get(0)][Arrays.asList(three.get(i)).get(1)] = 1;
+                lab[three.get(i)[0]][three.get(i)[1]] = 1;
             }
 
             for (int i = 0; i < n; i++) {
@@ -102,7 +102,7 @@ public class Main {
             visited = new boolean[n][m];
 
             for (int i = 0; i < 3; i++) {
-                lab[Arrays.asList(three.get(i)).get(0)][Arrays.asList(three.get(i)).get(1)] = 0;
+                lab[three.get(i)[0]][three.get(i)[1]] = 0;
             }
             return;
         }
