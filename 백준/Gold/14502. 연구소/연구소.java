@@ -7,7 +7,7 @@ public class Main {
     static int m;
     static int[][] lab;
     static List<Integer[]> zeros;
-    static Stack<Integer[]> three;
+    static List<Integer[]> three;
     static boolean[][] visited;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
@@ -22,9 +22,9 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
         lab = new int[n][m];
-        zeros = new ArrayList<>();
-        three = new Stack<>();
         visited = new boolean[n][m];
+        zeros = new ArrayList<>();
+        three = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -64,25 +64,19 @@ public class Main {
                 int nx = x + dx[k];
                 int ny = y + dy[k];
 
-                if (nx >= 0 && nx < m && ny >= 0 && ny < n && !visited[ny][nx] && (lab[ny][nx] == 0 || lab[ny][nx] == 2)) {
+                if (nx >= 0 && nx < m && ny >= 0 && ny < n && !visited[ny][nx]
+                        && (lab[ny][nx] == 0 || lab[ny][nx] == 2)) {
                     visited[ny][nx] = true;
                     q.add(new Integer[]{ny, nx});
                 }
-
             }
-
         }
-
-
     }
 
     static void combi(int idx) {
         if (three.size() == 3) {
-
-            Stack<Integer[]> tmp = new Stack<>();
             for (int i = 0; i < 3; i++) {
-                tmp.push(three.pop());
-                lab[tmp.peek()[0]][tmp.peek()[1]] = 1;
+                lab[Arrays.asList(three.get(i)).get(0)][Arrays.asList(three.get(i)).get(1)] = 1;
             }
 
             for (int i = 0; i < n; i++) {
@@ -93,10 +87,7 @@ public class Main {
                 }
             }
 
-
             int cnt = 0;
-//        System.out.println(i + " " + j);
-//        System.out.println(Arrays.deepToString(visited));
 
             for (int k = 0; k < n; k++) {
                 for (int l = 0; l < m; l++) {
@@ -111,21 +102,15 @@ public class Main {
             visited = new boolean[n][m];
 
             for (int i = 0; i < 3; i++) {
-                three.push(tmp.pop());
-                lab[three.peek()[0]][three.peek()[1]] = 0;
+                lab[Arrays.asList(three.get(i)).get(0)][Arrays.asList(three.get(i)).get(1)] = 0;
             }
-
-//            for (Integer[] x : three) {
-//                System.out.print(Arrays.toString(x) + " ");
-//            }
-//            System.out.println();
             return;
         }
 
         for (int i = idx; i < zeros.size(); i++) {
-            three.push(zeros.get(i));
+            three.add(zeros.get(i));
             combi(i + 1);
-            three.pop();
+            three.remove(three.size() - 1);
         }
     }
 }
