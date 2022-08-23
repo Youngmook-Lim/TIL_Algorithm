@@ -3,11 +3,9 @@ import java.util.*;
 
 public class Main {
 
-    static int n;
-    static int m;
+    static int n, m;
     static int[][] lab;
-    static List<int[]> zeros;
-    static List<int[]> three;
+    static List<int[]> zeros, three;
     static boolean[][] visited;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
@@ -50,10 +48,17 @@ public class Main {
     } // main
 
 
-    static void bfs(int i, int j) {
+    static void bfs() {
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{i, j});
-        visited[i][j] = true;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (lab[i][j] == 2) {
+                    q.add(new int[]{i, j});
+                    visited[i][j] = true;
+                }
+            }
+        }
 
         while (!q.isEmpty()) {
             int[] tmp = q.poll();
@@ -79,13 +84,7 @@ public class Main {
                 lab[three.get(i)[0]][three.get(i)[1]] = 1;
             }
 
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    if (lab[i][j] == 2) {
-                        bfs(i, j);
-                    }
-                }
-            }
+            bfs();
 
             int cnt = 0;
 
@@ -112,5 +111,6 @@ public class Main {
             combi(i + 1);
             three.remove(three.size() - 1);
         }
+
     }
 }
