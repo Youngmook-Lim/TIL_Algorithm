@@ -24,13 +24,10 @@ public class Solution {
 
 	}
 
-	// idx번째 원소를 고르는 경우와 안고르는 경우로 확장
 	static void powerSet(int idx) {
-		// 부분집합이 다 골라짐
 		if (idx == N) {
 			int sum = 0;
 			for (int i = 0; i < N; i++) {
-				// check된 숫자를 더한다.
 				if (check[i]) {
 					sum += arr[i];
 				}
