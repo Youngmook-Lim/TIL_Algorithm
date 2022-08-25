@@ -69,9 +69,9 @@ public class Main {
 
     static void bfs(int i, int j) {
         Queue<P> q = new LinkedList<>();
-        paper[i][j] = 1;
+        int size = 0;
+        paper[i][j] = ++size;
         q.add(new P(j, i));
-        int size = 1;
         while (!q.isEmpty()) {
             P p = q.poll();
             for (int k = 0; k < 4; k++) {
