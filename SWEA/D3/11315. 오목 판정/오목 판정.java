@@ -64,11 +64,8 @@ public class Solution {
 
         }
 
-
         bw.flush();
         bw.close();
         br.close();
-
     }
-
 }
