@@ -8,7 +8,6 @@ public class Solution {
     static int k, len, ans;
     static int[] arr;
     static List<Integer> tmpList;
-
     static List<int[]> combinations;
 
     public static void main(String[] args) throws IOException {
@@ -30,15 +29,13 @@ public class Solution {
             combinations = new ArrayList<>();
             ans = 0;
 
-
             k = Integer.parseInt(st.nextToken());
 
             if (k > len) {
                 k = len;
             }
 
-            dfs(0);
-            findNum(0);
+            findNum(0, 0);
 
             bw.write("#" + t + " " + ans + "\n");
 
@@ -48,7 +45,7 @@ public class Solution {
         br.close();
     }
 
-    static void findNum(int depth) {
+    static void findNum(int idx, int depth) {
         if (depth == k) {
             int total = 0;
             int m = 1;
@@ -60,23 +57,12 @@ public class Solution {
             return;
         }
 
-        for (int i = 0; i < combinations.size(); i++) {
-            swap(combinations.get(i)[0], combinations.get(i)[1]);
-            findNum(depth + 1);
-            swap(combinations.get(i)[0], combinations.get(i)[1]);
-        }
-    }
-
-    static void dfs(int start) {
-        if (tmpList.size() == 2) {
-            combinations.add(new int[]{tmpList.get(0), tmpList.get(1)});
-            return;
-        }
-
-        for (int i = start; i < len; i++) {
-            tmpList.add(i);
-            dfs(i + 1);
-            tmpList.remove(tmpList.size() - 1);
+        for (int i = idx; i < len; i++) {
+            for (int j = i + 1; j < len; j++) {
+                swap(i, j);
+                findNum(i, depth + 1);
+                swap(i, j);
+            }
         }
     }
 
@@ -85,4 +71,6 @@ public class Solution {
         arr[a] = arr[b];
         arr[b] = tmp;
     }
+
+
 }
