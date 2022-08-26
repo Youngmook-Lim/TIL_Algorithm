@@ -4,23 +4,12 @@ import java.util.*;
 public class Main {
 
     static class Person {
-        int w, h, idx, rank;
+        int w, h, rank;
 
-        public Person(int w, int h, int idx, int rank) {
+        public Person(int w, int h, int rank) {
             this.w = w;
             this.h = h;
-            this.idx = idx;
             this.rank = rank;
-        }
-
-        @Override
-        public String toString() {
-            return "Person{" +
-                    "w=" + w +
-                    ", h=" + h +
-                    ", idx=" + idx +
-                    ", rank=" + rank +
-                    '}';
         }
     }
 
@@ -39,22 +28,13 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int w = Integer.parseInt(st.nextToken());
             int h = Integer.parseInt(st.nextToken());
-            Person p = new Person(w, h, i, -1);
+            Person p = new Person(w, h, -1);
             arr[i] = p;
         }
 
-        Arrays.sort(arr, new Comparator<Person>() {
-            @Override
-            public int compare(Person o1, Person o2) {
-                return o2.w - o1.w;
-            }
-        });
-
-        arr[0].rank = 1;
-
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             int cnt = 1;
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j < n; j++) {
                 if (arr[i].w < arr[j].w && arr[i].h < arr[j].h) {
                     cnt++;
                 }
@@ -62,13 +42,6 @@ public class Main {
             arr[i].rank = cnt;
         }
 
-        Arrays.sort(arr, new Comparator<Person>() {
-            @Override
-            public int compare(Person o1, Person o2) {
-                return o1.idx - o2.idx;
-            }
-        });
-        
         for (Person p : arr) {
             bw.write(p.rank + " ");
         }
