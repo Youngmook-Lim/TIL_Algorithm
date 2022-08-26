@@ -5,32 +5,39 @@ public class Main {
 
     static int n, m;
     static List<Integer> list;
+    static StringBuilder sb;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
         list = new ArrayList<>();
+        sb = new StringBuilder();
 
-        dfs();
-        
+        dfs(0);
+
+        bw.write(sb.toString());
+
+        bw.flush();
+        bw.close();
         br.close();
     }
 
-    static void dfs() {
-        if (list.size() == m) {
+    static void dfs(int depth) {
+        if (depth == m) {
             for (int x : list) {
-                System.out.print(x + " ");
+                sb.append(x).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
             return;
         }
 
         for (int i = 1; i <= n; i++) {
             if (list.contains(i)) continue;
             list.add(i);
-            dfs();
+            dfs(depth + 1);
             list.remove(list.size() - 1);
         }
     }
