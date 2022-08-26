@@ -8,7 +8,7 @@ public class Main {
     static List<Node>[] map;
     static int[] distance;
 
-    static class Node {
+    static class Node implements Comparable<Node> {
         int num, dist;
 
         Node(int num, int dist) {
@@ -22,6 +22,12 @@ public class Main {
                     "num=" + num +
                     ", dist=" + dist +
                     '}';
+        }
+
+
+        @Override
+        public int compareTo(Node o) {
+            return this.dist - o.dist;
         }
     }
 
@@ -70,28 +76,23 @@ public class Main {
 
     static void dijkstra(int start) {
         distance[start] = 0;
-        Queue<int[]> q = new PriorityQueue<>(new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return o1[0] - o2[0];
-            }
-        });
-        q.add(new int[]{distance[start], start});
+        Queue<Node> q = new PriorityQueue<>();
+        q.add(new Node(start, distance[start]));
 
         while (!q.isEmpty()) {
-            int[] tmp = q.poll();
-            int d = tmp[0];
-            int s = tmp[1];
+            Node n = q.poll();
+            int dist = n.dist;
+            int num = n.num;
 
-            if (distance[s] < d) {
+            if (distance[num] < dist) {
                 continue;
             }
 
-            for (Node nd : map[s]) {
-                int totalDist = d + nd.dist;
+            for (Node nd : map[num]) {
+                int totalDist = dist + nd.dist;
                 if (totalDist < distance[nd.num]) {
                     distance[nd.num] = totalDist;
-                    q.add(new int[]{distance[nd.num], nd.num});
+                    q.add(new Node(nd.num, distance[nd.num]));
                 }
             }
         }
