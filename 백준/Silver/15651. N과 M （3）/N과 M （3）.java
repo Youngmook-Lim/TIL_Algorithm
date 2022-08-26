@@ -1,22 +1,34 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
 
-    static int n;
-    static int m;
+    static int n, m;
+    static List<Integer> list;
+    static StringBuilder sb;
 
-    static List<Integer> list = new ArrayList<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        list = new ArrayList<>();
+        sb = new StringBuilder();
 
-    static void dfs(int cnt) {
-        if (cnt == m) {
+        dfs(0);
+
+        bw.write(sb.toString());
+
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    static void dfs(int depth) {
+        if (depth == m) {
             for (int x : list) {
-                sb.append(x + " ");
+                sb.append(x).append(" ");
             }
             sb.append("\n");
             return;
@@ -24,25 +36,9 @@ public class Main {
 
         for (int i = 1; i <= n; i++) {
             list.add(i);
-            dfs(cnt + 1);
+            dfs(depth + 1);
             list.remove(list.size() - 1);
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-
-        dfs(0);
-        System.out.println(sb);
-
-        br.close();
-
-    }
-
 }
-
-
-
