@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 
     static int n, k, ans;
-    static int MAX = 200000;
+    static int MAX = 100000;
     static boolean[] visited;
 
     static class P {
@@ -44,32 +44,26 @@ public class Main {
 
         while (!q.isEmpty()) {
             P p = q.poll();
-
+            
             if (p.x == k) {
-
                 if (p.sec < ans) {
                     ans = p.sec;
                 }
                 continue;
             }
+            
             visited[p.x] = true;
-
 
             if (p.x * 2 <= MAX && !visited[p.x * 2] && p.x < k) {
                 q.add(new P(p.x * 2, p.sec));
             }
             if (p.x + 1 <= MAX && !visited[p.x + 1]) {
                 q.add(new P(p.x + 1, p.sec + 1));
-
             }
             if (p.x - 1 >= 0 && !visited[p.x - 1]) {
                 q.add(new P(p.x - 1, p.sec + 1));
             }
-
         }
-
     }
-
-
 }
 
