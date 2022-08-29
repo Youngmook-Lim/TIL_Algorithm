@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
 
-    static List<Integer> list;
+    static Stack<Integer> stack;
     static int n, m;
     static int[] arr;
 
@@ -14,7 +14,7 @@ public class Main {
 
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        list = new ArrayList<>();
+        stack = new Stack<>();
         arr = new int[n];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
@@ -23,17 +23,17 @@ public class Main {
 
         Arrays.sort(arr);
 
-        dfs(0);
+        dfs();
 
         bw.flush();
         bw.close();
         br.close();
     }
 
-    static void dfs(int depth) {
+    static void dfs() {
 
-        if (depth == m) {
-            for (int x : list) {
+        if (stack.size() == m) {
+            for (int x : stack) {
                 System.out.print(x + " ");
             }
             System.out.println();
@@ -41,10 +41,10 @@ public class Main {
         }
 
         for (int i = 0; i < n; i++) {
-            if (list.contains(arr[i])) continue;
-            list.add(arr[i]);
-            dfs(depth + 1);
-            list.remove(list.size() - 1);
+            if (stack.contains(arr[i])) continue;
+            stack.push(arr[i]);
+            dfs();
+            stack.pop();
         }
 
     }
