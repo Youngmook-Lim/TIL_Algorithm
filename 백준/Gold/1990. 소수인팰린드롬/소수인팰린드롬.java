@@ -19,7 +19,7 @@ public class Main {
 
         for (int i = 2; i < Math.sqrt(b) + 1; i++) {
             if (!arr[i]) {
-                for (int j = i * 2; j < b + 1; j += i) {
+                for (int j = i * i; j < b + 1; j += i) {
                     arr[j] = true;
                 }
             }
@@ -27,19 +27,13 @@ public class Main {
 
         while (a <= b) {
             if (!arr[a]) {
-                StringBuilder sb = new StringBuilder();
-                String nStr = Integer.toString(a);
-                sb.append(a);
-                if (nStr.equals(sb.reverse().toString())) {
+                if (checkPalin(a)) {
                     sbAns.append(a).append("\n");
                 }
             }
-            if (a == b) {
-                sbAns.append(-1 + "\n");
-            }
             a++;
         }
-
+        sbAns.append(-1 + "\n");
         bw.write(sbAns.toString());
 
         bw.flush();
@@ -47,5 +41,16 @@ public class Main {
         br.close();
     }
 
+    static boolean checkPalin(int a) {
+        int n = a;
+        int k = 0;
+
+        while (n > 0) {
+            k *= 10;
+            k += n % 10;
+            n /= 10;
+        }
+        return k == a;
+    }
 
 }
