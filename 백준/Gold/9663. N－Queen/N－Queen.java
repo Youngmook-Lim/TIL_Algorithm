@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static int n, ans;
-    static boolean[][] graph;
+    static int[] col;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,7 +12,7 @@ public class Main {
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
-        graph = new boolean[n][n];
+        col = new int[n];
 
         dfs(0);
 
@@ -30,22 +30,16 @@ public class Main {
         }
 
         for (int i = 0; i < n; i++) {
-            if (check(depth, i)) {
-                graph[depth][i] = true;
+            col[depth] = i;
+            if (check(depth)) {
                 dfs(depth + 1);
-                graph[depth][i] = false;
             }
         }
     }
 
-    static boolean check(int depth, int i) {
-        for (int j = 0; j < depth; j++) {
-            int x_pos_1 = i - (depth - j);
-            int x_pos_2 = i + (depth - j);
-
-            if (graph[j][i]
-                    || (x_pos_1 >= 0 && x_pos_1 < n && graph[j][x_pos_1])
-                    || (x_pos_2 >= 0 && x_pos_2 < n && graph[j][x_pos_2])) {
+    static boolean check(int depth) {
+        for (int i = 0; i < depth; i++) {
+            if (col[i] == col[depth] || Math.abs(col[depth] - col[i]) == depth - i) {
                 return false;
             }
         }
