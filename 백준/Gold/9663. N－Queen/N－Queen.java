@@ -24,40 +24,32 @@ public class Main {
     }
 
     static void dfs(int depth) {
-
         if (depth == n) {
-//            for (boolean[] x : graph) {
-//                System.out.println(Arrays.toString(x));
-//            }
-//            System.out.println();
             ans++;
             return;
         }
 
         for (int i = 0; i < n; i++) {
-            boolean flag = true;
-            for (int j = 0; j < depth; j++) {
-                if (graph[j][i]) {
-                    flag = false;
-                    break;
-                }
-                int x_pos_1 = i - (depth - j);
-                int x_pos_2 = i + (depth - j);
-                if (x_pos_1 >= 0 && x_pos_1 < n && graph[j][x_pos_1]) {
-                    flag = false;
-                    break;
-                }
-                if (x_pos_2 >= 0 && x_pos_2 < n && graph[j][x_pos_2]) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
+            if (check(depth, i)) {
                 graph[depth][i] = true;
                 dfs(depth + 1);
                 graph[depth][i] = false;
             }
         }
+    }
+
+    static boolean check(int depth, int i) {
+        for (int j = 0; j < depth; j++) {
+            int x_pos_1 = i - (depth - j);
+            int x_pos_2 = i + (depth - j);
+
+            if (graph[j][i]
+                    || (x_pos_1 >= 0 && x_pos_1 < n && graph[j][x_pos_1])
+                    || (x_pos_2 >= 0 && x_pos_2 < n && graph[j][x_pos_2])) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
