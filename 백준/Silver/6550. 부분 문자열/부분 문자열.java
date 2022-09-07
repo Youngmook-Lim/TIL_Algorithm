@@ -5,8 +5,11 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
         String str;
+
         while ((str = br.readLine()) != null) {
             StringTokenizer st = new StringTokenizer(str);
             String s = st.nextToken();
@@ -20,9 +23,13 @@ public class Main {
                 if (idx == s.length()) break;
             }
 
-            System.out.println((idx == s.length()) ? "Yes" : "No");
+            sb.append((idx == s.length()) ? "Yes" : "No").append("\n");
         }
 
+        bw.write(sb.toString());
+        
+        bw.flush();
+        bw.close();
         br.close();
     }
 }
