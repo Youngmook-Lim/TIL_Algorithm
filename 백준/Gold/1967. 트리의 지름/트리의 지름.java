@@ -1,14 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n, tmp, ans;
+    static int n, max, max_idx;
     static List<List<Node>> graph;
-    static List<Integer> radius;
+    static boolean[] visited;
 
     static class Node {
         int num, dist;
@@ -25,10 +24,9 @@ public class Main {
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
-        ans = 0;
-        tmp = 0;
+        visited = new boolean[n + 1];
+
         graph = new ArrayList<>();
-        radius = new ArrayList<>();
         for (int i = 0; i < n + 1; i++) {
             graph.add(new ArrayList<>());
         }
@@ -38,26 +36,17 @@ public class Main {
             int child = Integer.parseInt(st.nextToken());
             int distance = Integer.parseInt(st.nextToken());
             graph.get(parent).add(new Node(child, distance));
+            graph.get(child).add(new Node(parent, distance));
         }
 
-        for (int i = 1; i < n + 1; i++) {
-            for (int j = 0; j < graph.get(i).size(); j++) {
-                dfs(graph.get(i).get(j).num, graph.get(i).get(j).dist);
-                radius.add(tmp);
-                tmp = 0;
-            }
-            if (radius.isEmpty()) continue;
+        visited[1] = true;
+        dfs(1, 0);
 
-            if (radius.size() == 1) {
-                ans = Math.max(ans, radius.get(0));
-            } else {
-                radius.sort(Collections.reverseOrder());
-                ans = Math.max(ans, radius.get(0) + radius.get(1));
-            }
-            radius.clear();
-        }
-
-        bw.write(ans + "\n");
+        visited = new boolean[n + 1];
+        visited[max_idx] = true;
+        dfs(max_idx, 0);
+        
+        bw.write(max + "\n");
 
         bw.flush();
         bw.close();
@@ -65,15 +54,17 @@ public class Main {
     }
 
     static void dfs(int start, int sum) {
-        if (graph.get(start).isEmpty()) {
-            tmp = Math.max(tmp, sum);
-            return;
+        if (sum > max) {
+            max = sum;
+            max_idx = start;
         }
 
-        for (int i = 0; i < graph.get(start).size(); i++) {
-            dfs(graph.get(start).get(i).num, sum + graph.get(start).get(i).dist);
+        for (Node x : graph.get(start)) {
+            if (!visited[x.num]) {
+                visited[x.num] = true;
+                dfs(x.num, sum + x.dist);
+            }
         }
     }
-
-
+    
 }
