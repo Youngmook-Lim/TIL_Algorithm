@@ -1,96 +1,89 @@
-import java.io.*;
+//// 시간복잡도 계산용 - 출처 블로그 ////
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.StringTokenizer;
+
 
 public class Main {
+    static class Loc{
+        int i;
+        int j;
+        int cnt;
+        boolean destroyed;
 
-    static int n, m, ans;
-    static char[][] graph;
-    static boolean[][][] visited;
-    static int[] dx = {1, -1, 0, 0};
-    static int[] dy = {0, 0, 1, -1};
-
-    static class P {
-        int x, y, dist;
-        boolean isBroken;
-
-        P(int y, int x, int dist, boolean isBroken) {
-            this.x = x;
-            this.y = y;
-            this.dist = dist;
-            this.isBroken = isBroken;
+        public Loc(int i, int j, int cnt, boolean d) {
+            this.i = i;
+            this.j = j;
+            this.cnt = cnt;
+            this.destroyed = d;
         }
     }
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        String[] inputs = br.readLine().split(" ");
 
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        graph = new char[n][m];
-        ans = Integer.MAX_VALUE;
+        int n = Integer.parseInt(inputs[0]);
+        int m = Integer.parseInt(inputs[1]);
 
+        char[][] map = new char[n][m];
         for (int i = 0; i < n; i++) {
-            String[] tmp = br.readLine().split("");
+            String input = br.readLine();
             for (int j = 0; j < m; j++) {
-                graph[i][j] = tmp[j].charAt(0);
+                map[i][j] = input.charAt(j);
             }
         }
 
-        visited = new boolean[2][n][m];
-        bfs();
 
-        if (ans == Integer.MAX_VALUE) {
-            bw.write(-1 + "\n");
-        } else {
-            bw.write(ans + "\n");
-        }
+        Queue<Loc> q = new LinkedList<>();
+        q.add(new Loc(0, 0, 1, false));
 
+        int[] mi = {0, 0, -1, 1};
+        int[] mj = {-1, 1, 0, 0};
 
-        bw.flush();
-        bw.close();
-        br.close();
-    }
-
-    static void bfs() {
-        Queue<P> q = new LinkedList<>();
-        q.add(new P(0, 0, 1, false));
-        visited[0][0][0] = true;
-        visited[1][0][0] = true;
+        boolean[][][] visited = new boolean[n][m][2];
 
         while (!q.isEmpty()) {
-            P p = q.poll();
+            Loc now = q.poll();
 
-            if (p.x == m - 1 && p.y == n - 1) {
-                ans = Math.min(ans, p.dist);
-                break;
+            if (now.i == n - 1 && now.j == m - 1) {
+                System.out.println(now.cnt);
+                return;
             }
 
-            for (int k = 0; k < 4; k++) {
-                int nx = p.x + dx[k];
-                int ny = p.y + dy[k];
+            for (int d = 0; d < 4; d++) {
+                int ni = now.i + mi[d];
+                int nj = now.j + mj[d];
 
-                if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
-                    if (p.isBroken && !visited[1][ny][nx]) {
-                        if (graph[ny][nx] == '0') {
-                            visited[1][ny][nx] = true;
-                            q.add(new P(ny, nx, p.dist + 1, true));
-                        }
-                    } else if (!p.isBroken && !visited[0][ny][nx]) {
-                        if (graph[ny][nx] == '1') {
-                            visited[1][ny][nx] = true;
-                            q.add(new P(ny, nx, p.dist + 1, true));
-                        } else {
-                            visited[0][ny][nx] = true;
-                            q.add(new P(ny, nx, p.dist + 1, false));
-                        }
+                if(ni<0 || ni>=n || nj<0 || nj>=m) continue;
+
+                int next_cnt = now.cnt+1;
+
+                if(map[ni][nj]=='0'){ // 벽이 아니면
+                    if(!now.destroyed && !visited[ni][nj][0]) { // 부신 벽이 여태까지 없었으면
+                        q.add(new Loc(ni, nj, next_cnt, false));
+                        visited[ni][nj][0] = true;
+                    }else if(now.destroyed && !visited[ni][nj][1]){ // 벽을 한번 부신 적이 있으면
+                        q.add(new Loc(ni, nj, next_cnt, true));
+                        visited[ni][nj][1] = true;
                     }
+
+                }else if(map[ni][nj]=='1'){ // 벽이면
+
+                    if(!now.destroyed){ // 한번도 벽을 부순적이 없다면 부순다~
+                        q.add(new Loc(ni, nj, next_cnt, true));
+                        visited[ni][nj][1] = true;
+                    }
+                    // 한번 부순 적이 있다면 또 부수고 갈 수 없기 때문에 pass
                 }
             }
-        }
-    }
 
+        }
+
+        System.out.println(-1);
+    }
 }
