@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static int n, m, ans;
-    static int[][] graph;
+    static char[][] graph;
     static boolean[][][] visited;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
@@ -30,13 +30,13 @@ public class Main {
 
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        graph = new int[n][m];
+        graph = new char[n][m];
         ans = Integer.MAX_VALUE;
 
         for (int i = 0; i < n; i++) {
             String[] tmp = br.readLine().split("");
             for (int j = 0; j < m; j++) {
-                graph[i][j] = Integer.parseInt(tmp[j]);
+                graph[i][j] = tmp[j].charAt(0);
             }
         }
 
@@ -75,17 +75,16 @@ public class Main {
 
                 if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
                     if (p.isBroken && !visited[1][ny][nx]) {
-                        if (graph[ny][nx] == 0) {
+                        if (graph[ny][nx] == '0') {
                             visited[1][ny][nx] = true;
                             q.add(new P(ny, nx, p.dist + 1, true));
                         }
                     } else if (!p.isBroken && !visited[0][ny][nx]) {
-                        if (graph[ny][nx] == 1) {
+                        if (graph[ny][nx] == '1') {
                             visited[1][ny][nx] = true;
                             q.add(new P(ny, nx, p.dist + 1, true));
                         } else {
                             visited[0][ny][nx] = true;
-                            visited[1][ny][nx] = true;
                             q.add(new P(ny, nx, p.dist + 1, false));
                         }
                     }
