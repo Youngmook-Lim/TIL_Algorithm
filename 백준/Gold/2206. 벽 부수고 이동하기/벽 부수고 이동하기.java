@@ -39,6 +39,22 @@ public class Main {
         }
 
         visited = new boolean[2][n][m];
+
+        bfs();
+
+        if (ans == 0) {
+            bw.write(-1 + "\n");
+        } else {
+            bw.write(ans + "\n");
+        }
+
+
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    static void bfs() {
         Queue<P> q = new LinkedList<>();
         q.add(new P(0, 0, 1, false));
 
@@ -47,7 +63,6 @@ public class Main {
 
             if (p.x == m - 1 && p.y == n - 1) {
                 ans = p.dist;
-                System.out.println(ans);
                 return;
             }
 
@@ -74,18 +89,6 @@ public class Main {
                 }
             }
         }
-
-
-        bw.write(-1 + "\n");
-
-
-        bw.flush();
-        bw.close();
-        br.close();
-    }
-
-    static void bfs() {
-
     }
 
 }
