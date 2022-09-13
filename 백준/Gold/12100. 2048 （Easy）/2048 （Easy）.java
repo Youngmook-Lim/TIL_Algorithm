@@ -21,6 +21,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
                 graph[i][j] = Integer.parseInt(st.nextToken());
+                ans = Math.max(ans, graph[i][j]);
             }
         }
 
@@ -75,6 +76,7 @@ public class Main {
                                         flag = true;
                                         tmpGraph[idx - 1][i] *= 2;
                                         tmpGraph[j][i] = 0;
+                                        ans = Math.max(ans, tmpGraph[idx - 1][i]);
                                     } else {
                                         flag = false;
                                         tmpGraph[idx][i] = tmpGraph[j][i];
@@ -104,6 +106,8 @@ public class Main {
                                         flag = true;
                                         tmpGraph[idx + 1][i] *= 2;
                                         tmpGraph[j][i] = 0;
+                                        ans = Math.max(ans, tmpGraph[idx + 1][i]);
+
                                     } else {
                                         flag = false;
                                         tmpGraph[idx][i] = tmpGraph[j][i];
@@ -132,6 +136,8 @@ public class Main {
                                         flag = true;
                                         tmpGraph[i][idx + 1] *= 2;
                                         tmpGraph[i][j] = 0;
+                                        ans = Math.max(ans, tmpGraph[i][idx + 1]);
+
                                     } else {
                                         flag = false;
                                         tmpGraph[i][idx] = tmpGraph[i][j];
@@ -160,6 +166,8 @@ public class Main {
                                         flag = true;
                                         tmpGraph[i][idx - 1] *= 2;
                                         tmpGraph[i][j] = 0;
+                                        ans = Math.max(ans, tmpGraph[i][idx - 1]);
+
                                     } else {
                                         flag = false;
                                         tmpGraph[i][idx] = tmpGraph[i][j];
@@ -175,15 +183,7 @@ public class Main {
                     }
                     break;
             }
-
         }
-        for (int[] x : tmpGraph) {
-            for (int y : x) {
-                ans = Math.max(ans, y);
-            }
-        }
-
-
     }
 
 
