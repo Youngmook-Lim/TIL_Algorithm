@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 public class Main {
 
@@ -12,21 +13,8 @@ public class Main {
         str = br.readLine();
         n = str.length();
 
-        for (int i = 0; i < n - 1; i++) {
-            int[] pi = new int[n - i];
-            int idx = i;
-            int max = 0;
-            for (int j = i + 1; j < n; j++) {
-                while (idx > i && str.charAt(j) != str.charAt(idx)) {
-                    idx = pi[idx - 1 - i] + i;
-                }
-                if (str.charAt(idx) == str.charAt(j)) {
-                    pi[j - i] = ++idx - i;
-                    max = Math.max(max, idx - i);
-                }
-            }
-//            System.out.println(Arrays.toString(pi));
-            ans = Math.max(ans, max);
+        for (int i = 0; i < n-1; i++) {
+            KMP(str.substring(i, n));
         }
 
         bw.write(ans + "\n");
@@ -35,6 +23,23 @@ public class Main {
         bw.flush();
         bw.close();
         br.close();
+    }
+
+    static void KMP(String subStr) {
+        int len = subStr.length();
+        int[] pi = new int[len];
+        int leftIdx = 0;
+        int max = 0;
+        for (int rightIdx = 1; rightIdx < len; rightIdx++) {
+            while (leftIdx > 0 && subStr.charAt(rightIdx) != subStr.charAt(leftIdx)) {
+                leftIdx = pi[leftIdx - 1];
+            }
+            if (subStr.charAt(leftIdx) == subStr.charAt(rightIdx)) {
+                pi[rightIdx] = ++leftIdx;
+                max = Math.max(max, leftIdx);
+            }
+        }
+        ans = Math.max(ans, max);
     }
 
 }
