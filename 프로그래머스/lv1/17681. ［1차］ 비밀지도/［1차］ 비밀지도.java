@@ -1,23 +1,29 @@
+import java.util.*;
+
 class Solution {
     public String[] solution(int n, int[] arr1, int[] arr2) {
+        String[] answer = new String[n];
+        
         for (int i = 0; i < n; i++) {
-            arr1[i] = arr1[i] | arr2[i];
+            answer[i] = Integer.toBinaryString(arr1[i] | arr2[i]);
         }
         
-        String[] answer = new String[n];
-        StringBuilder sb;
+        System.out.println(Arrays.toString(answer));
         
-        for (int k = 0; k < n; k++) {
-            sb = new StringBuilder();
-            for (int i = n-1; i >= 0; i--) {
-                if ((arr1[k] & (1 << i)) != 0) {
-                    sb.append("#");
+        for (int i = 0; i < n; i++) {
+            String tmp = "";
+            for (int j = 0; j < n; j++) {
+                String now = String.format("%" + n + "s", answer[i]);
+                System.out.println(now);
+                if (now.charAt(j) == '1') {
+                    tmp += "#";
                 } else {
-                    sb.append(" ");
+                    tmp += " ";
                 }
             }
-            answer[k] = sb.toString();
+            answer[i] = tmp;
         }
+        
         return answer;
     }
 }
