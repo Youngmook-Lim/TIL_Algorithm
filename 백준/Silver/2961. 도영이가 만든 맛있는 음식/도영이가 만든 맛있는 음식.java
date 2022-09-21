@@ -15,6 +15,13 @@ public class Main {
             this.bitter = bitter;
         }
 
+        @Override
+        public String toString() {
+            return "Ingredient{" +
+                    "sour=" + sour +
+                    ", bitter=" + bitter +
+                    '}';
+        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -41,29 +48,29 @@ public class Main {
         br.close();
     }
 
-    static void dfs(int depth, int idx) {
+    static void dfs(int depth, int visited) {
         if (depth == n) {
-            if (!list.isEmpty()) {
-                ans = Math.min(ans, getDiff());
+            if (visited != 0) {
+                ans = Math.min(ans, getDiff(visited));
             }
+
             return;
         }
 
-        for (int i = idx; i < n; i++) {
-            list.add(i);
-            dfs(depth + 1, i + 1);
-            list.remove(list.size() - 1);
-            dfs(depth + 1, i + 1);
-        }
+        dfs(depth + 1, visited | (1 << depth));
+        dfs(depth + 1, visited);
+
     }
 
-    static int getDiff() {
+    static int getDiff(int visited) {
         int sourTotal = 1;
         int bitterTotal = 0;
-        for (int x : list) {
-            Ingredient ig = arr[x];
-            sourTotal *= ig.sour;
-            bitterTotal += ig.bitter;
+        for (int i = 0; i < n; i++) {
+            if ((visited & (1 << i)) != 0) {
+                Ingredient ig = arr[i];
+                sourTotal *= ig.sour;
+                bitterTotal += ig.bitter;
+            }
         }
         return Math.abs(sourTotal - bitterTotal);
     }
