@@ -58,6 +58,8 @@ public class Main {
 
     static void dfs(int idx, int cnt) {
 
+        if (cnt >= ans) return;
+
         if (idx == list.size()) {
             success = true;
             ans = Math.min(ans, cnt);
