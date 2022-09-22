@@ -38,7 +38,7 @@ public class Solution {
                 arr[i] = new Coords(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
             }
 
-            dfs(0, 0, 0);
+            dfs(0, company, 0);
 
             System.out.println("#" + t + " " + ans);
 
@@ -51,24 +51,20 @@ public class Solution {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     }
 
-    static void dfs(int depth, int prev, int dist) {
+    static void dfs(int depth, Coords prev, int dist) {
         if (dist >= ans) {
             return;
         }
 
         if (depth == n) {
-            ans = Math.min(ans, dist + findDistance(house, arr[prev]));
+            ans = Math.min(ans, dist + findDistance(house, prev));
             return;
         }
 
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                if (depth == 0) {
-                    dfs(depth + 1, i, dist + findDistance(company, arr[i]));
-                } else {
-                    dfs(depth + 1, i, dist + findDistance(arr[prev], arr[i]));
-                }
+                dfs(depth + 1, arr[i], dist + findDistance(prev, arr[i]));
                 visited[i] = false;
             }
         }
