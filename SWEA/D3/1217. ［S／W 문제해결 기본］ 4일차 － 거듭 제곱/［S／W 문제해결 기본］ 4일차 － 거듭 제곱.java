@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,30 +5,38 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
-    static int recursive(int n, int m) {
-        if (m == 1) {
-            return n;
-        }
-
-        return n * recursive(n, m - 1);
-    }
+    static int n, m;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
         int T = 10;
-//        int T = Integer.parseInt(br.readLine());
+
         for (int t = 1; t <= T; t++) {
-            int tt = Integer.parseInt(br.readLine());
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int n = Integer.parseInt(st.nextToken());
-            int m = Integer.parseInt(st.nextToken());
+            int tc = Integer.parseInt(br.readLine());
+            st = new StringTokenizer(br.readLine());
+            n = Integer.parseInt(st.nextToken());
+            m = Integer.parseInt(st.nextToken());
 
-            int ans = recursive(n, m);
-
-            System.out.println("#" + tt + " " + ans);
-
+            System.out.println("#" + t + " " + calculate(n, m));
         }
 
         br.close();
     }
+
+    static int calculate(int a, int b) {
+
+        if (b == 1) {
+            return a;
+        }
+
+        int result = calculate(a, b / 2);
+
+        if (b % 2 == 0) {
+            return result * result;
+        } else {
+            return result * result * a;
+        }
+    }
+
 }
