@@ -11,8 +11,6 @@ public class Main {
     static boolean success;
     static List<P> list;
     static int[] papers;
-    static final int N = 10;
-    static final int PAPERNUMBER = 5;
 
     static class P {
         int x, y;
@@ -29,11 +27,11 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        graph = new int[N][N];
+        graph = new int[10][10];
         list = new ArrayList<>();
-        papers = new int[PAPERNUMBER + 1];
-        for (int i = 1; i <= PAPERNUMBER; i++) {
-            papers[i] = PAPERNUMBER;
+        papers = new int[5 + 1];
+        for (int i = 1; i <= 5; i++) {
+            papers[i] = 5;
         }
         ans = Integer.MAX_VALUE;
 
@@ -60,11 +58,6 @@ public class Main {
 
     static void dfs(int idx, int cnt) {
 
-//        for (int[] x : graph) {
-//            System.out.println(Arrays.toString(x));
-//        }
-//        System.out.println();
-
         if (idx == list.size()) {
             success = true;
             ans = Math.min(ans, cnt);
@@ -72,16 +65,16 @@ public class Main {
         }
 
         P p = list.get(idx);
-
+        int maxSize = checkMaxFit(p.y, p.x);
 
         if (graph[p.y][p.x] == 1) {
-            for (int i = 1; i <= PAPERNUMBER; i++) {
-                if (checkFit(p.y, p.x, i) && papers[i] > 0) {
-                    markFit(p.y, p.x, i);
+            for (int i = 1; i <= maxSize; i++) {
+                if (papers[i] > 0) {
+                    markFit(p.y, p.x, i, 0);
                     papers[i]--;
                     dfs(idx + 1, cnt + 1);
                     papers[i]++;
-                    markFitReverse(p.y, p.x, i);
+                    markFit(p.y, p.x, i, 1);
                 }
             }
         } else {
@@ -89,32 +82,34 @@ public class Main {
         }
     }
 
-    static boolean checkFit(int y, int x, int size) {
-        for (int i = y; i < y + size; i++) {
-            for (int j = x; j < x + size; j++) {
-                if (i >= 10 || i < 0 || j >= 10 || j < 0) {
-                    return false;
-                }
-                if (graph[i][j] != 1) {
-                    return false;
+    static int checkMaxFit(int y, int x) {
+        int size = 1;
+
+        loop:
+        while (size <= 5) {
+            for (int i = y; i < y + size; i++) {
+                for (int j = x; j < x + size; j++) {
+                    if (i >= 10 || i < 0 || j >= 10 || j < 0) {
+                        break loop;
+                    }
+                    if (graph[i][j] != 1) {
+                        break loop;
+                    }
                 }
             }
+            size++;
         }
-        return true;
+        return --size;
     }
 
-    static void markFit(int y, int x, int size) {
+    static void markFit(int y, int x, int size, int type) {
         for (int i = y; i < y + size; i++) {
             for (int j = x; j < x + size; j++) {
-                graph[i][j] = size + 1;
-            }
-        }
-    }
-
-    static void markFitReverse(int y, int x, int size) {
-        for (int i = y; i < y + size; i++) {
-            for (int j = x; j < x + size; j++) {
-                graph[i][j] = 1;
+                if (type == 0) {
+                    graph[i][j] = size + 1;
+                } else {
+                    graph[i][j] = 1;
+                }
             }
         }
     }
