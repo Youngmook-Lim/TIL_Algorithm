@@ -9,6 +9,7 @@ public class Main {
 
     static int n, m, h, w, sr, sc, fr, fc, ans;
     static int[][] graph;
+    static int[][] prefix;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
 
@@ -29,21 +30,30 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
         ans = Integer.MAX_VALUE;
 
-        graph = new int[n][m];
+        graph = new int[n + 1][m + 1];
+        prefix = new int[n + 1][m + 1];
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < m; j++) {
+            for (int j = 1; j <= m; j++) {
                 graph[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                prefix[i][j] = graph[i][j] + prefix[i - 1][j]
+                        + prefix[i][j - 1] - prefix[i - 1][j - 1];
+            }
+        }
+
         st = new StringTokenizer(br.readLine());
         h = Integer.parseInt(st.nextToken());
         w = Integer.parseInt(st.nextToken());
-        sr = Integer.parseInt(st.nextToken()) - 1;
-        sc = Integer.parseInt(st.nextToken()) - 1;
-        fr = Integer.parseInt(st.nextToken()) - 1;
-        fc = Integer.parseInt(st.nextToken()) - 1;
+        sr = Integer.parseInt(st.nextToken());
+        sc = Integer.parseInt(st.nextToken());
+        fr = Integer.parseInt(st.nextToken());
+        fc = Integer.parseInt(st.nextToken());
+
 
         bfs(sr, sc);
 
@@ -53,9 +63,6 @@ public class Main {
             System.out.println(-1);
         }
 
-//        for (int[] x : graph) {
-//            System.out.println(Arrays.toString(x));
-//        }
 
         br.close();
     }
@@ -76,7 +83,7 @@ public class Main {
                 int nx = p.x + dx[k];
                 int ny = p.y + dy[k];
 
-                if (nx < 0 || ny < 0 || nx >= m || ny >= n || graph[ny][nx] == 2) continue;
+                if (nx < 1 || ny < 1 || nx > m || ny > n || graph[ny][nx] == 2) continue;
 
                 if (checkPossible(ny, nx, h, w)) {
                     graph[ny][nx] = 2;
@@ -87,13 +94,8 @@ public class Main {
     }
 
     static boolean checkPossible(int y, int x, int h, int w) {
-        for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
-                if (i < 0 || j < 0 || i >= n || j >= m || graph[i][j] == 1) return false;
-            }
-        }
-        return true;
+        if (y + h - 1 > n || x + w - 1 > m) return false;
+        return prefix[y + h - 1][x + w - 1] - prefix[y + h - 1][x - 1]
+                - prefix[y - 1][x + w - 1] + prefix[y - 1][x - 1] == 0;
     }
-
-
 }
