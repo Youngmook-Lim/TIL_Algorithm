@@ -68,12 +68,16 @@ public class Main {
             }
         }
 
+        StringBuilder sb = new StringBuilder();
+
         for (int[] row : graph) {
             for (int col : row) {
-                System.out.print(col + " ");
+                sb.append(col).append(' ');
             }
-            System.out.println();
+            sb.append("\n");
         }
+
+        System.out.println(sb);
 
 
     }
