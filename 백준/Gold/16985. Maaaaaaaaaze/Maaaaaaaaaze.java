@@ -4,7 +4,8 @@ import java.util.*;
 public class Main {
 
     static int ans;
-    static int[][][] box, stackedBox, visitedBox;
+    static int[][][] box, stackedBox;
+    static boolean[][][] visitedBox;
     static int[] dx = {1, -1, 0, 0, 0, 0};
     static int[] dy = {0, 0, 1, -1, 0, 0};
     static int[] dz = {0, 0, 0, 0, 1, -1};
@@ -131,30 +132,36 @@ public class Main {
     static void bfs(int i, int j) {
         if (stackedBox[0][i][j] == 0 || stackedBox[4][4 - i][4 - j] == 0) return;
 
-        visitedBox = new int[5][5][5];
+        visitedBox = new boolean[5][5][5];
         Queue<P> q = new LinkedList<>();
         q.add(new P(0, i, j));
-        visitedBox[0][i][j] = 1;
+        visitedBox[0][i][j] = true;
+        int cnt = 0;
 
         while (!q.isEmpty()) {
-            P p = q.poll();
-            if (p.x == 4 - j && p.y == 4 - i && p.z == 4) {
-                ans = Math.min(ans, visitedBox[p.z][p.y][p.x] - 1);
-                return;
+            int len = q.size();
+
+            for (int a = 0; a < len; a++) {
+                P p = q.poll();
+                if (p.x == 4 - j && p.y == 4 - i && p.z == 4) {
+                    ans = Math.min(ans, cnt);
+                    return;
+                }
+
+                for (int l = 0; l < 6; l++) {
+                    int nx = p.x + dx[l];
+                    int ny = p.y + dy[l];
+                    int nz = p.z + dz[l];
+
+                    if (nx < 0 || nx >= 5 || ny < 0 || ny >= 5 || nz < 0 || nz >= 5
+                            || stackedBox[nz][ny][nx] == 0 || visitedBox[nz][ny][nx]) continue;
+
+                    visitedBox[nz][ny][nx] = true;
+                    q.add(new P(nz, ny, nx));
+
+                }
             }
-
-            for (int l = 0; l < 6; l++) {
-                int nx = p.x + dx[l];
-                int ny = p.y + dy[l];
-                int nz = p.z + dz[l];
-
-                if (nx < 0 || nx >= 5 || ny < 0 || ny >= 5 || nz < 0 || nz >= 5
-                        || stackedBox[nz][ny][nx] == 0 || visitedBox[nz][ny][nx] != 0) continue;
-
-                visitedBox[nz][ny][nx] = visitedBox[p.z][p.y][p.x] + 1;
-                q.add(new P(nz, ny, nx));
-
-            }
+            cnt++;
         }
     }
 
