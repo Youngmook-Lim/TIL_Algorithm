@@ -123,13 +123,13 @@ public class Main {
 
 
         }
-        if (stackedBox[0][0][0] == 1 && stackedBox[4][4][4] == 1) {
-            bfs();
-        }
+        
+        bfs();
 
     }
 
     static void bfs() {
+        if (stackedBox[0][0][0] == 0 || stackedBox[4][4][4] == 0) return;
 
         visitedBox = new boolean[5][5][5];
         Queue<P> q = new LinkedList<>();
