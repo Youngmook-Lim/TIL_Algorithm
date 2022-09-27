@@ -123,19 +123,18 @@ public class Main {
 
 
         }
-        bfs(0, 0);
-        bfs(0, 4);
-        bfs(4, 0);
-        bfs(4, 4);
+        if (stackedBox[0][0][0] == 1 && stackedBox[4][4][4] == 1) {
+            bfs();
+        }
+
     }
 
-    static void bfs(int i, int j) {
-        if (stackedBox[0][i][j] == 0 || stackedBox[4][4 - i][4 - j] == 0) return;
+    static void bfs() {
 
         visitedBox = new boolean[5][5][5];
         Queue<P> q = new LinkedList<>();
-        q.add(new P(0, i, j));
-        visitedBox[0][i][j] = true;
+        q.add(new P(0, 0, 0));
+        visitedBox[0][0][0] = true;
         int cnt = 0;
 
         while (!q.isEmpty()) {
@@ -143,7 +142,7 @@ public class Main {
 
             for (int a = 0; a < len; a++) {
                 P p = q.poll();
-                if (p.x == 4 - j && p.y == 4 - i && p.z == 4) {
+                if (p.x == 4 && p.y == 4 && p.z == 4) {
                     ans = Math.min(ans, cnt);
                     return;
                 }
