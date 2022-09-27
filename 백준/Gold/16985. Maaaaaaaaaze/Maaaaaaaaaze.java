@@ -129,7 +129,7 @@ public class Main {
     }
 
     static void bfs(int i, int j) {
-        if (stackedBox[0][i][j] == 0) return;
+        if (stackedBox[0][i][j] == 0 || stackedBox[4][4 - i][4 - j] == 0) return;
 
         visitedBox = new int[5][5][5];
         Queue<P> q = new LinkedList<>();
