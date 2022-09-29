@@ -34,7 +34,7 @@ public class Solution {
 
             while (drug <= d) {
                 if (finalFlag) break;
-                dfs(0, 0);
+                dfs(0, 0, 0);
                 drug++;
             }
 
@@ -49,8 +49,11 @@ public class Solution {
         br.close();
     }
 
-    static void dfs(int idx, int depth) {
+    static void dfs(int idx, int depth, int cnt) {
         if (finalFlag) return;
+
+        if (depth > k) return;
+
         if (depth == drug) {
             check();
             return;
@@ -58,9 +61,9 @@ public class Solution {
 
         for (int i = idx; i < d; i++) {
             combi[i] = 1;
-            dfs(i + 1, depth + 1);
+            dfs(i + 1, depth + 1, cnt + 1);
             combi[i] = 2;
-            dfs(i + 1, depth + 1);
+            dfs(i + 1, depth + 1, cnt + 1);
             combi[i] = 0;
         }
     }
