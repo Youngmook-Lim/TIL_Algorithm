@@ -2,10 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
+    static final long INF = Long.MAX_VALUE;
     static long ans;
     static int n, pick;
     static double e;
     static int[] x, y;
+    static Queue<Node> q;
 
     static class Node implements Comparable<Node> {
         int v;
@@ -20,15 +22,25 @@ public class Solution {
         public int compareTo(Node o) {
             return Long.compare(this.dist, o.dist);
         }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "v=" + v +
+                    ", dist=" + dist +
+                    '}';
+        }
     }
 
+    static long[] dist;
     static boolean[] visited;
-    static List<List<Node>> list;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
+
+        StringBuilder sb = new StringBuilder();
 
         int T = Integer.parseInt(br.readLine());
         for (int t = 1; t <= T; t++) {
@@ -38,10 +50,8 @@ public class Solution {
             x = new int[n];
             y = new int[n];
             visited = new boolean[n];
-            list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                list.add(new ArrayList<>());
-            }
+            dist = new long[n];
+            Arrays.fill(dist, INF);
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < n; i++) {
                 x[i] = Integer.parseInt(st.nextToken());
@@ -52,43 +62,42 @@ public class Solution {
             }
             e = Double.parseDouble(br.readLine());
 
+            q = new PriorityQueue<>();
+            q.add(new Node(0, 0));
 
-            for (int i = 0; i < n - 1; i++) {
-                for (int j = i; j < n; j++) {
-                    int startX = x[i];
-                    int startY = y[i];
-                    int endX = x[j];
-                    int endY = y[j];
-                    long dist = (long) (Math.pow(Math.abs(startX - endX), 2) + Math.pow(Math.abs(startY - endY), 2));
-
-                    list.get(i).add(new Node(j, dist));
-                    list.get(j).add(new Node(i, dist));
-                }
-            }
-
-            Queue<Node> q = new PriorityQueue<>();
-            visited[0] = true;
-            q.addAll(list.get(0));
-            while (pick < n - 1) {
+            while (pick < n) {
                 Node node = q.poll();
 
                 if (visited[node.v]) continue;
                 visited[node.v] = true;
-
                 ans += node.dist;
-                q.addAll(list.get(node.v));
+
+                for (int i = 0; i < n; i++) {
+                    if (!visited[i] && i != node.v) {
+                        long calculatedDist = calcDist(node.v, i);
+                        if (calculatedDist < dist[i]) {
+                            dist[i] = calculatedDist;
+                            q.add(new Node(i, calculatedDist));
+                        }
+                    }
+                }
                 pick++;
             }
 
             ans = Math.round(ans * e);
 
-            bw.write("#" + t + " " + ans + "\n");
-
+            sb.append("#" + t + " " + ans + "\n");
         }
+
+        bw.write(sb.toString());
 
         bw.flush();
         bw.close();
         br.close();
+    }
+
+    static long calcDist(int a, int b) {
+        return (long) (Math.pow(Math.abs(x[a] - x[b]), 2) + Math.pow(Math.abs(y[a] - y[b]), 2));
     }
 
 
