@@ -9,7 +9,8 @@ public class Main {
     static int[][] addSoil;
     static int[][] graph;
     static Queue<Tree> trees;
-    static Queue<Tree> pq;
+    static Queue<Tree> live;
+    static Queue<Tree> dead;
 
     static class Tree implements Comparable<Tree> {
         int x, y, age;
@@ -36,7 +37,8 @@ public class Main {
         addSoil = new int[n][n];
         graph = new int[n][n];
         trees = new PriorityQueue<>();
-        pq = new PriorityQueue<>();
+        live = new LinkedList<>();
+        dead = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
@@ -67,18 +69,18 @@ public class Main {
     }
 
     static void springNSummer() {
-        List<Tree> tmp = new ArrayList<>();
         while (!trees.isEmpty()) {
             Tree t = trees.poll();
             if (t.age <= graph[t.y][t.x]) {
                 graph[t.y][t.x] -= t.age;
                 t.age++;
-                pq.add(t);
+                live.add(t);
             } else {
-                tmp.add(t);
+                dead.add(t);
             }
         }
-        for (Tree t : tmp) {
+        while (!dead.isEmpty()) {
+            Tree t = dead.poll();
             graph[t.y][t.x] += t.age / 2;
         }
     }
@@ -86,8 +88,8 @@ public class Main {
     static void autumn() {
         int[] dx = {1, -1, 1, -1, 0, 0, 1, -1};
         int[] dy = {1, -1, -1, 1, 1, -1, 0, 0};
-        while (!pq.isEmpty()) {
-            Tree t = pq.poll();
+        while (!live.isEmpty()) {
+            Tree t = live.poll();
             if (t.age % 5 == 0) {
                 for (int j = 0; j < 8; j++) {
                     int nx = t.x + dx[j];
