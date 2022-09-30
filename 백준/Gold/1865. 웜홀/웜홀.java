@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static final int INF = Integer.MAX_VALUE;
+    static final int INF = 987654321;
     static boolean res;
     static int TC, n, m, w;
     static List<Edge> list;
@@ -50,12 +50,14 @@ public class Main {
                 list.add(new Edge(s, e, t));
             }
 
-            for (int i = 0; i < n; i++) {
-                if (bellmanFord(i)) {
-                    res = true;
-                    break;
-                }
-            }
+//            for (int i = 0; i < n; i++) {
+//                if (bellmanFord(i)) {
+//                    res = true;
+//                    break;
+//                }
+//            }
+            
+            res = bellmanFord(0);
 
             if (res) {
                 sb.append("YES").append("\n");
@@ -69,13 +71,12 @@ public class Main {
     }
 
     static boolean bellmanFord(int start) {
-        times[start] = 0;
         boolean update;
         for (int i = 0; i < n; i++) {
             update = false;
             for (int j = 0; j < list.size(); j++) {
                 Edge e = list.get(j);
-                if (times[e.start] != INF && times[e.start] + e.time < times[e.end]) {
+                if (times[e.start] + e.time < times[e.end]) {
                     times[e.end] = times[e.start] + e.time;
                     update = true;
                     if (i == n - 1) {
