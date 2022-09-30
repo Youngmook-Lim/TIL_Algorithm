@@ -37,8 +37,8 @@ public class Main {
         addSoil = new int[n][n];
         graph = new int[n][n];
         trees = new PriorityQueue<>();
-        live = new LinkedList<>();
-        dead = new LinkedList<>();
+        live = new ArrayDeque<>();
+        dead = new ArrayDeque<>();
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
