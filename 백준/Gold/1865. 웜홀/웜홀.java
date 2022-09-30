@@ -4,7 +4,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static final int INF = 987654321;
     static boolean res;
     static int TC, n, m, w;
     static List<Edge> list;
@@ -32,7 +31,6 @@ public class Main {
             w = Integer.parseInt(st.nextToken());
             list = new ArrayList<>();
             times = new int[n];
-            Arrays.fill(times, INF);
             res = false;
             for (int i = 0; i < m; i++) {
                 st = new StringTokenizer(br.readLine());
@@ -49,13 +47,6 @@ public class Main {
                 int t = -Integer.parseInt(st.nextToken());
                 list.add(new Edge(s, e, t));
             }
-
-//            for (int i = 0; i < n; i++) {
-//                if (bellmanFord(i)) {
-//                    res = true;
-//                    break;
-//                }
-//            }
             
             res = bellmanFord(0);
 
