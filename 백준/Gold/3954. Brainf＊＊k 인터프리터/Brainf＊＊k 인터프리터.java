@@ -49,7 +49,43 @@ public class Main {
             cnt = 0;
 
             while (idx < sc && cnt++ <= LIMIT) {
-                runProgram();
+                char cmd = code.charAt(idx);
+
+                switch (cmd) {
+                    case '+':
+                        memory[pointer] = (memory[pointer] + 1) % 256;
+                        break;
+                    case '-':
+                        memory[pointer] = (memory[pointer] + 255) % 256;
+                        break;
+                    case '<':
+                        pointer = (sm + pointer - 1) % sm;
+                        break;
+                    case '>':
+                        pointer = (sm + pointer + 1) % sm;
+                        break;
+                    case '.':
+                        break;
+                    case ',':
+                        if (inputIdx == si) {
+                            memory[pointer] = 255;
+                        } else {
+                            memory[pointer] = input.charAt(inputIdx++);
+                        }
+                        break;
+                    case '[':
+                        if (memory[pointer] == 0) {
+                            idx = brackets[idx];
+                        }
+                        break;
+                    case ']':
+                        if (memory[pointer] != 0) {
+                            idx = brackets[idx];
+                        }
+                        break;
+                }
+
+                idx++;
             }
 
             if (idx == sc) {
@@ -58,7 +94,43 @@ public class Main {
                 int maxLoopIdx, minLoopIdx;
                 maxLoopIdx = minLoopIdx = idx;
                 while (cnt-- > 0) {
-                    runProgram();
+                    char cmd = code.charAt(idx);
+
+                    switch (cmd) {
+                        case '+':
+                            memory[pointer] = (memory[pointer] + 1) % 256;
+                            break;
+                        case '-':
+                            memory[pointer] = (memory[pointer] + 255) % 256;
+                            break;
+                        case '<':
+                            pointer = (sm + pointer - 1) % sm;
+                            break;
+                        case '>':
+                            pointer = (sm + pointer + 1) % sm;
+                            break;
+                        case '.':
+                            break;
+                        case ',':
+                            if (inputIdx == si) {
+                                memory[pointer] = 255;
+                            } else {
+                                memory[pointer] = input.charAt(inputIdx++);
+                            }
+                            break;
+                        case '[':
+                            if (memory[pointer] == 0) {
+                                idx = brackets[idx];
+                            }
+                            break;
+                        case ']':
+                            if (memory[pointer] != 0) {
+                                idx = brackets[idx];
+                            }
+                            break;
+                    }
+
+                    idx++;
                     minLoopIdx = Math.min(minLoopIdx, idx);
                     maxLoopIdx = Math.max(maxLoopIdx, idx);
                 }
@@ -74,45 +146,6 @@ public class Main {
         br.close();
     }
 
-    static void runProgram() {
-        char cmd = code.charAt(idx);
-
-        switch (cmd) {
-            case '+':
-                memory[pointer] = (memory[pointer] + 1) % 256;
-                break;
-            case '-':
-                memory[pointer] = (memory[pointer] + 255) % 256;
-                break;
-            case '<':
-                pointer = (sm + pointer - 1) % sm;
-                break;
-            case '>':
-                pointer = (sm + pointer + 1) % sm;
-                break;
-            case '.':
-                break;
-            case ',':
-                if (inputIdx == si) {
-                    memory[pointer] = 255;
-                } else {
-                    memory[pointer] = input.charAt(inputIdx++);
-                }
-                break;
-            case '[':
-                if (memory[pointer] == 0) {
-                    idx = brackets[idx];
-                }
-                break;
-            case ']':
-                if (memory[pointer] != 0) {
-                    idx = brackets[idx];
-                }
-                break;
-        }
-
-        idx++;
-    }
 
 }
 
