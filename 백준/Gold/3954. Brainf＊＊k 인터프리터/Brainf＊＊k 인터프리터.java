@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -14,8 +12,8 @@ public class Main {
     static String code, input;
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
         StringTokenizer st;
 
@@ -49,103 +47,68 @@ public class Main {
             cnt = 0;
 
             while (idx < sc && cnt++ <= LIMIT) {
-                char cmd = code.charAt(idx);
-
-                switch (cmd) {
-                    case '+':
-                        memory[pointer] = (memory[pointer] + 1) % 256;
-                        break;
-                    case '-':
-                        memory[pointer] = (memory[pointer] + 255) % 256;
-                        break;
-                    case '<':
-                        pointer = (sm + pointer - 1) % sm;
-                        break;
-                    case '>':
-                        pointer = (sm + pointer + 1) % sm;
-                        break;
-                    case '.':
-                        break;
-                    case ',':
-                        if (inputIdx == si) {
-                            memory[pointer] = 255;
-                        } else {
-                            memory[pointer] = input.charAt(inputIdx++);
-                        }
-                        break;
-                    case '[':
-                        if (memory[pointer] == 0) {
-                            idx = brackets[idx];
-                        }
-                        break;
-                    case ']':
-                        if (memory[pointer] != 0) {
-                            idx = brackets[idx];
-                        }
-                        break;
-                }
-
-                idx++;
+                runProgram();
             }
 
             if (idx == sc) {
-                sb.append("Terminates").append('\n');
+                sb.append("Terminates\n");
             } else {
                 int maxLoopIdx, minLoopIdx;
                 maxLoopIdx = minLoopIdx = idx;
                 while (cnt-- > 0) {
-                    char cmd = code.charAt(idx);
-
-                    switch (cmd) {
-                        case '+':
-                            memory[pointer] = (memory[pointer] + 1) % 256;
-                            break;
-                        case '-':
-                            memory[pointer] = (memory[pointer] + 255) % 256;
-                            break;
-                        case '<':
-                            pointer = (sm + pointer - 1) % sm;
-                            break;
-                        case '>':
-                            pointer = (sm + pointer + 1) % sm;
-                            break;
-                        case '.':
-                            break;
-                        case ',':
-                            if (inputIdx == si) {
-                                memory[pointer] = 255;
-                            } else {
-                                memory[pointer] = input.charAt(inputIdx++);
-                            }
-                            break;
-                        case '[':
-                            if (memory[pointer] == 0) {
-                                idx = brackets[idx];
-                            }
-                            break;
-                        case ']':
-                            if (memory[pointer] != 0) {
-                                idx = brackets[idx];
-                            }
-                            break;
-                    }
-
-                    idx++;
+                    runProgram();
                     minLoopIdx = Math.min(minLoopIdx, idx);
                     maxLoopIdx = Math.max(maxLoopIdx, idx);
                 }
 
-                sb.append("Loops ").append(minLoopIdx - 1).append(' ').append(maxLoopIdx).append('\n');
+                sb.append("Loops " + (minLoopIdx - 1) + " " + maxLoopIdx + "\n");
             }
-
-
         }
 
-        System.out.println(sb);
-
+        bw.write(sb.toString());
+        bw.flush();
+        bw.close();
         br.close();
     }
 
+    static void runProgram() {
+        char cmd = code.charAt(idx);
+
+        switch (cmd) {
+            case '+':
+                memory[pointer] = (memory[pointer] == 255) ? 0 : memory[pointer] + 1;
+                break;
+            case '-':
+                memory[pointer] = (memory[pointer] == 0) ? 255 : memory[pointer] - 1;
+                break;
+            case '<':
+                pointer = (pointer == 0) ? sm - 1 : pointer - 1;
+                break;
+            case '>':
+                pointer = (pointer == sm - 1) ? 0 : pointer + 1;
+                break;
+            case '.':
+                break;
+            case ',':
+                if (inputIdx == si) {
+                    memory[pointer] = 255;
+                } else {
+                    memory[pointer] = input.charAt(inputIdx++);
+                }
+                break;
+            case '[':
+                if (memory[pointer] == 0) {
+                    idx = brackets[idx];
+                }
+                break;
+            case ']':
+                if (memory[pointer] != 0) {
+                    idx = brackets[idx];
+                }
+                break;
+        }
+        idx++;
+    }
 
 }
 
