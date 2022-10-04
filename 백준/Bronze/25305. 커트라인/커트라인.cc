@@ -1,6 +1,5 @@
 #include <iostream>
 #include <algorithm>
-
 using namespace std;
 
 int main()
@@ -9,7 +8,7 @@ int main()
 
   cin >> n >> k;
 
-  int *arr = new int[n];
+  int arr[n];
 
   for (int i = 0; i < n; i++)
   {
