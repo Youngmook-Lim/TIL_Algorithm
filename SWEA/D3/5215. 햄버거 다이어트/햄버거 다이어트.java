@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
@@ -37,23 +38,35 @@ public class Solution {
                 int cal = Integer.parseInt(st.nextToken());
                 hamburgers[i] = new Ingredient(score, cal);
             }
-
-            for (int i = 1; i < n + 1; i++) {
-                for (int j = 1; j < l + 1; j++) {
-                    Ingredient cur = hamburgers[i];
-                    if (cur.cal <= j) {
-                        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - cur.cal] + cur.score);
-                    } else {
-                        dp[i][j] = dp[i - 1][j];
-                    }
-                }
+            for (int i = 0; i < n + 1; i++) {
+                Arrays.fill(dp[i], -1);
             }
 
-            sb.append("#" + t + " " + dp[n][l]).append('\n');
+            int ans = getHamburger(n, l);
+
+            sb.append("#" + t + " " + ans).append('\n');
 
         }
         System.out.println(sb);
         br.close();
+    }
+
+    static int getHamburger(int n, int l) {
+        if (n < 1) return 0;
+
+        Ingredient cur = hamburgers[n];
+
+        if (dp[n][l] == -1) {
+
+            if (cur.cal <= l) {
+                dp[n][l] = Math.max(getHamburger(n - 1, l), getHamburger(n - 1, l - cur.cal) + cur.score);
+            } else {
+                dp[n][l] = getHamburger(n - 1, l);
+            }
+        }
+
+        return dp[n][l];
+
     }
 
 
