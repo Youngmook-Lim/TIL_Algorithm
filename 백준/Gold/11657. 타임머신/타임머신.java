@@ -43,17 +43,20 @@ public class Main {
 
         boolean result = bellmanFord(0);
 
+        StringBuilder sb = new StringBuilder();
         if (result) {
             for (int i = 1; i < n; i++) {
                 if (times[i] == INF) {
-                    System.out.println(-1);
+                    sb.append(-1).append('\n');
                 } else {
-                    System.out.println(times[i]);
+                    sb.append(times[i]).append('\n');
                 }
             }
         } else {
-            System.out.println(-1);
+            sb.append(-1).append('\n');
         }
+
+        System.out.println(sb);
 
         br.close();
     }
