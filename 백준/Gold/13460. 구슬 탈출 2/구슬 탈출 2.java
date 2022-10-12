@@ -1,20 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n, m;
+    static int n, m, rx, ry, bx, by, xx, yy;
     static char[][] graph;
-    static int flag;
     static int[] dx = {0, 1, 0, -1};
     static int[] dy = {-1, 0, 1, 0};
-    static List<Integer> list;
-    static int num = 1;
+    static boolean[][][][] visited;
+    static int num;
+
+    static class B {
+        int rx, ry, bx, by;
+
+        public B(int rx, int ry, int bx, int by) {
+            this.rx = rx;
+            this.ry = ry;
+            this.bx = bx;
+            this.by = by;
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,22 +31,81 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
         graph = new char[n][m];
-        list = new ArrayList<>();
+        visited = new boolean[m][n][m][n];
+        num = 1;
         for (int i = 0; i < n; i++) {
             String tmp = br.readLine();
             for (int j = 0; j < m; j++) {
                 graph[i][j] = tmp.charAt(j);
             }
         }
-
-        while (num <= 10) {
-            dfs(0);
-            if (flag == 1) break;
-            num++;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (graph[i][j] == 'B') {
+                    bx = j;
+                    by = i;
+                } else if (graph[i][j] == 'R') {
+                    rx = j;
+                    ry = i;
+                } 
+            }
         }
 
-        if (num == 11) {
-            num = -1;
+        Queue<B> q = new ArrayDeque<>();
+        q.add(new B(rx, ry, bx, by));
+        visited[rx][ry][bx][by] = true;
+
+        loop:
+        while (true) {
+            int size = q.size();
+            while (size-- > 0) {
+                B b = q.poll();
+                for (int k = 0; k < 4; k++) {
+                    int nrx = b.rx;
+                    int nry = b.ry;
+                    int nbx = b.bx;
+                    int nby = b.by;
+                    int cntR = 0;
+                    int cntB = 0;
+
+                    while (graph[nry][nrx] != 'O' && graph[nry + dy[k]][nrx + dx[k]] != '#') {
+                        nrx += dx[k];
+                        nry += dy[k];
+                        cntR++;
+                    }
+                    while (graph[nby][nbx] != 'O' && graph[nby + dy[k]][nbx + dx[k]] != '#') {
+                        nbx += dx[k];
+                        nby += dy[k];
+                        cntB++;
+                    }
+
+                    if (graph[nby][nbx] == 'O') continue;
+
+                    if (graph[nry][nrx] == 'O') break loop;
+
+                    if (nrx == nbx && nry == nby) {
+                        if (cntR > cntB) {
+                            nrx -= dx[k];
+                            nry -= dy[k];
+                        } else {
+                            nbx -= dx[k];
+                            nby -= dy[k];
+                        }
+                    }
+
+                    if (!visited[nrx][nry][nbx][nby]) {
+                        q.add(new B(nrx, nry, nbx, nby));
+                        visited[nrx][nry][nbx][nby] = true;
+                    }
+
+                }
+
+            }
+            num++;
+            if (num > 10 || q.isEmpty()) {
+                num = -1;
+                break loop;
+            }
         }
 
         System.out.println(num);
@@ -45,127 +113,6 @@ public class Main {
         br.close();
     }
 
-    static void dfs(int depth) {
-        if (flag == 1) return;
-        if (depth == num) {
-            char[][] tmp = new char[n][m];
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    tmp[i][j] = graph[i][j];
-                }
-            }
-
-            for (int i = 0; i < num; i++) {
-                if (!check(list.get(i), tmp)) {
-                    break;
-                }
-            }
-            return;
-        }
-
-        for (int i = 0; i < 4; i++) {
-            if (depth > 0 && i == list.get(list.size() - 1)) continue;
-            list.add(i);
-            dfs(depth + 1);
-            list.remove(list.size() - 1);
-        }
-    }
-
-    static boolean check(int dir, char[][] arr) {
-        int rx = 0;
-        int ry = 0;
-        int bx = 0;
-        int by = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (arr[i][j] == 'B') {
-                    bx = j;
-                    by = i;
-                } else if (arr[i][j] == 'R') {
-                    rx = j;
-                    ry = i;
-                }
-            }
-        }
-        boolean resultRed, resultBlue;
-
-        if ((dir == 0 && ry < by) || (dir == 1 && rx > bx) || (dir == 2 && ry > by) || (dir == 3 && rx < bx)) {
-            resultRed = roll(dir, arr, ry, rx);
-            resultBlue = roll(dir, arr, by, bx);
-        } else {
-            resultBlue = roll(dir, arr, by, bx);
-            resultRed = roll(dir, arr, ry, rx);
-        }
-        if (!resultRed && resultBlue) {
-            flag = 1;
-            return false;
-        } else if (resultRed && resultBlue) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-
-    static boolean roll(int dir, char[][] arr, int y, int x) {
-//        System.out.println(dir);
-//        print(arr);
-        char tmp = arr[y][x];
-        arr[y][x] = '.';
-        switch (dir) {
-            case 0:
-                while (true) {
-                    y--;
-                    if (arr[y][x] != '.') {
-                        if (arr[y][x] == 'O') {
-                            return false;
-                        }
-                        y++;
-                        break;
-                    }
-                }
-                break;
-            case 1:
-                while (true) {
-                    x++;
-                    if (arr[y][x] != '.') {
-                        if (arr[y][x] == 'O') {
-                            return false;
-                        }
-                        x--;
-                        break;
-                    }
-                }
-                break;
-            case 2:
-                while (true) {
-                    y++;
-                    if (arr[y][x] != '.') {
-                        if (arr[y][x] == 'O') {
-                            return false;
-                        }
-                        y--;
-                        break;
-                    }
-                }
-                break;
-            case 3:
-                while (true) {
-                    x--;
-                    if (arr[y][x] != '.') {
-                        if (arr[y][x] == 'O') {
-                            return false;
-                        }
-                        x++;
-                        break;
-                    }
-                }
-                break;
-        }
-        arr[y][x] = tmp;
-        return true;
-    }
 
 }
 
