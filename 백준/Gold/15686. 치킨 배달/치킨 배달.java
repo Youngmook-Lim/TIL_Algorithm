@@ -67,7 +67,7 @@ public class Main {
             tmpTotal = 0;
             for (int i = 0; i < houses.size(); i++) {
                 tmpTotal += calculate(houses.get(i));
-
+                if (tmpTotal >= ans) break;
             }
             ans = Math.min(ans, tmpTotal);
             destroyOrRestoreChicken(false);
