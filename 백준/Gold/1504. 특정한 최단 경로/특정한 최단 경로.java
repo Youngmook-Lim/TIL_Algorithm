@@ -84,13 +84,12 @@ public class Main {
         pq.add(new Node(start, 0));
         while (!pq.isEmpty()) {
             Node cur = pq.poll();
-
-            if (visited[cur.v]) continue;
-            visited[cur.v] = true;
-
+            
             if (cur.v == target) {
                 return distance[cur.v];
             }
+            if (visited[cur.v]) continue;
+            visited[cur.v] = true;
 
             for (Node next : adj[cur.v]) {
                 if (!visited[next.v] && distance[cur.v] + next.dist < distance[next.v]) {
