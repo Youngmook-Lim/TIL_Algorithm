@@ -37,7 +37,7 @@ public class Main {
         t = Integer.parseInt(st.nextToken());
         ans = 2;
         graph = new int[r][c];
-        q = new LinkedList<>();
+        q = new ArrayDeque<>();
         boolean tmpFlag = false;
         for (int i = 0; i < r; i++) {
             st = new StringTokenizer(br.readLine());
