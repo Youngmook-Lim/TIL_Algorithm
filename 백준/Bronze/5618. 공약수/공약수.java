@@ -12,6 +12,7 @@ public class Main {
         StringTokenizer st;
 
         int n = Integer.parseInt(br.readLine());
+        List<Integer> list = new ArrayList<>();
         int[] arr = new int[n];
         st = new StringTokenizer(br.readLine());
 
@@ -25,14 +26,23 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= gcd; i++) {
+        for (int i = 1; i <= Math.sqrt(gcd); i++) {
             if (gcd % i == 0) {
-                sb.append(i).append('\n');
+                list.add(i);
+                if (gcd / i != i) {
+                    list.add(gcd / i);
+                }
             }
         }
 
+        Collections.sort(list);
+
+        for (int x : list) {
+            sb.append(x).append('\n');
+        }
+
         System.out.println(sb);
-        
+
         br.close();
     }
 
