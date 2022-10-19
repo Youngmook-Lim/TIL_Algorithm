@@ -15,30 +15,34 @@ public class Main {
         int[] arr = new int[n];
         st = new StringTokenizer(br.readLine());
 
-        int min = Integer.MAX_VALUE;
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
-            min = Math.min(min, arr[i]);
+        }
+
+        int gcd = arr[0];
+        for (int i = 1; i < n; i++) {
+            gcd = getGCD(gcd, arr[i]);
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= min; i++) {
-            boolean flag = true;
-            for (int j = 0; j < n; j++) {
-                if (arr[j] % i != 0) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
+        for (int i = 1; i <= gcd; i++) {
+            if (gcd % i == 0) {
                 sb.append(i).append('\n');
             }
         }
 
         System.out.println(sb);
-
-
+        
         br.close();
+    }
+
+    static int getGCD(int a, int b) {
+        while (b != 0) {
+            int r = a % b;
+            a = b;
+            b = r;
+        }
+        return a;
     }
 
 
