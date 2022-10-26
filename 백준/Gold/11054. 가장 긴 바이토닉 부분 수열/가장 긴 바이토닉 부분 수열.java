@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     static int n, ans;
-    static int[] arr, dp;
+    static int[] arr, lis, lds;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,38 +22,39 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 0; i < n; i++) {
-            dp = new int[n];
-            int maxLower = 0;
-            for (int j = i - 1; j >= 0; j--) {
-                for (int k = j + 1; k <= i; k++) {
-                    if (arr[j] < arr[k]) {
-                        dp[j] = Math.max(dp[j], dp[k] + 1);
-                    }
-                }
-                maxLower = Math.max(maxLower, dp[j]);
-            }
+        lis = new int[n];
+        lds = new int[n];
 
-            int maxUpper = 0;
-            for (int j = i + 1; j < n; j++) {
-                for (int k = j - 1; k >= i; k--) {
-                    if (arr[j] < arr[k]) {
-                        dp[j] = Math.max(dp[j], dp[k] + 1);
-                    }
-                }
-                maxUpper = Math.max(maxUpper, dp[j]);
-            }
-//            System.out.println(i);
-//            System.out.println(maxLower);
-//            System.out.println(maxUpper);
-//            System.out.println(Arrays.toString(dp));
-//            System.out.println("--------");
-            ans = Math.max(ans, maxLower + maxUpper + 1);
+        calculateLIS();
+        calculateLDS();
+
+        for (int i = 0; i < n; i++) {
+            ans = Math.max(ans, lis[i] + lds[i] + 1);
         }
 
         System.out.println(ans);
 
         br.close();
+    }
+
+    static void calculateLIS() {
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[i] > arr[j]) {
+                    lis[i] = Math.max(lis[i], lis[j] + 1);
+                }
+            }
+        }
+    }
+
+    static void calculateLDS() {
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = n - 1; j > i; j--) {
+                if (arr[i] > arr[j]) {
+                    lds[i] = Math.max(lds[i], lds[j] + 1);
+                }
+            }
+        }
     }
 
 
