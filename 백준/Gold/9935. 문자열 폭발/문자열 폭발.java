@@ -14,39 +14,32 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
         StringBuilder sb = new StringBuilder();
 
         str = br.readLine();
         bomb = br.readLine();
         bombLen = bomb.length();
 
-        stack = new Stack<>();
+        for (int i = 0; i < str.length(); i++) {
+            sb.append(str.charAt(i));
 
-        for (int i = str.length() - 1; i >= 0; i--) {
-            stack.push(str.charAt(i));
-
-            if (stack.size() >= bombLen) {
+            if (sb.length() >= bombLen) {
                 flag = true;
                 for (int j = 0; j < bombLen; j++) {
-                    if (bomb.charAt(j) != stack.get(stack.size() - j - 1)) {
+                    if (bomb.charAt(j) != sb.charAt(sb.length() - bombLen + j)) {
                         flag = false;
                         break;
                     }
                 }
                 if (flag) {
-                    for (int j = 0; j < bombLen; j++) {
-                        stack.pop();
-                    }
+                    sb.delete(sb.length() - bombLen, sb.length());
                 }
             }
         }
 
-        if (stack.isEmpty()) {
+        if (sb.length() == 0) {
             sb.append("FRULA");
-        } else {
-            while (!stack.isEmpty()) {
-                sb.append(stack.pop());
-            }
         }
 
         System.out.println(sb);
