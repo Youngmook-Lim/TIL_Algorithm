@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static final int MAX = 200001;
+    static final int MAX = 100001;
     static int n, k, howMany, limit;
     static int[] visited;
     static Queue<P> q;
