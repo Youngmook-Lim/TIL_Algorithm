@@ -30,6 +30,12 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
+        if (n > k) {
+            System.out.println(n - k);
+            System.out.println(1);
+            return;
+        }
+
         visited = new int[MAX];
         Arrays.fill(visited, MAX + 1);
         q = new ArrayDeque<>();
