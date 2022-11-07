@@ -9,27 +9,18 @@ public class Main {
     static final int INF = 987654321;
     static int n, m, start, end;
     static boolean[] visited;
-    static int[] costs;
+    static int[] costs, path;
     static List<Node>[] adj;
+    static Deque<Integer> ans;
 
     static class Node {
         int v, cost;
-        List<Integer> history;
 
-        public Node(int v, int cost, List<Integer> history) {
+        public Node(int v, int cost) {
             this.v = v;
             this.cost = cost;
-            this.history = history;
         }
 
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "v=" + v +
-                    ", cost=" + cost +
-                    ", history=" + history +
-                    '}';
-        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -48,14 +39,16 @@ public class Main {
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
             int cost = Integer.parseInt(st.nextToken());
-            adj[start].add(new Node(end, cost, null));
+            adj[start].add(new Node(end, cost));
         }
 
         st = new StringTokenizer(br.readLine());
         start = Integer.parseInt(st.nextToken());
         end = Integer.parseInt(st.nextToken());
 
-        List<Integer> ans = dijkstra(start);
+        dijkstra(start);
+        getPath(end);
+
 
         StringBuilder sb = new StringBuilder();
         sb.append(costs[end]).append('\n');
@@ -69,7 +62,17 @@ public class Main {
         br.close();
     }
 
-    static List<Integer> dijkstra(int start) {
+    static void getPath(int cur) {
+        ans = new ArrayDeque<>();
+        while (cur != -1) {
+            ans.addFirst(cur);
+            cur = path[cur];
+        }
+    }
+
+    static void dijkstra(int start) {
+        path = new int[n + 1];
+        path[start] = -1;
         costs = new int[n + 1];
         Arrays.fill(costs, INF);
         costs[start] = 0;
@@ -82,13 +85,13 @@ public class Main {
         });
         List<Integer> tmp = new ArrayList<>();
         tmp.add(start);
-        pq.add(new Node(start, 0, tmp));
+        pq.add(new Node(start, 0));
 
         while (!pq.isEmpty()) {
             Node cur = pq.poll();
 
             if (cur.v == end) {
-                return cur.history;
+                return;
             }
 
             if (visited[cur.v]) continue;
@@ -97,14 +100,12 @@ public class Main {
             for (Node next : adj[cur.v]) {
                 if (!visited[next.v] && costs[cur.v] + next.cost <= costs[next.v]) {
                     costs[next.v] = costs[cur.v] + next.cost;
-                    tmp = new ArrayList<>(cur.history);
-                    tmp.add(next.v);
-                    pq.add(new Node(next.v, costs[next.v], tmp));
+                    path[next.v] = cur.v;
+                    pq.add(new Node(next.v, costs[next.v]));
                 }
             }
 
         }
-        return null;
     }
 
 
