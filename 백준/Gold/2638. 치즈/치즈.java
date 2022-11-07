@@ -6,7 +6,7 @@ import java.util.*;
 /*
  * 1. (0,0)에서 시작해서 빈칸 다 마킹
  * 2. 마킹되어있는 격자와 접촉하면서 2면 이상 비어있는지 확인
- * 3. 치즈 위치정보를 HashSet에 저장해볼까?
+ * 3. 치즈 위치정보를 Queue에 저장
  * */
 
 public class Main {
@@ -16,7 +16,7 @@ public class Main {
     static int[] dy = {0, 0, 1, -1};
     static int[][] graph;
     static boolean[][] isOpenAir;
-    static Set<P> hs;
+    static Queue<P> ad;
 
     static class P {
         int x, y;
@@ -35,20 +35,19 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
         graph = new int[n][m];
         isOpenAir = new boolean[n][m];
-        hs = new HashSet<>();
+        ad = new ArrayDeque<>();
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
                 graph[i][j] = Integer.parseInt(st.nextToken());
                 if (graph[i][j] == 1) {
-                    hs.add(new P(j, i));
+                    ad.add(new P(j, i));
                     numOfCheese++;
                 }
             }
         }
 
         markOpenAir(0, 0);
-
         while (numOfCheese > 0) {
             meltTheCheese();
             ans++;
@@ -60,8 +59,10 @@ public class Main {
     }
 
     static void meltTheCheese() {
-        List<P> molten = new ArrayList<>();
-        for (P p : hs) {
+        Queue<P> molten = new ArrayDeque<>();
+        int size = ad.size();
+        for (int i = 0; i < size; i++) {
+            P p = ad.poll();
             int cnt = 0;
             for (int k = 0; k < 4; k++) {
                 int nx = p.x + dx[k];
@@ -71,10 +72,11 @@ public class Main {
             if (cnt >= 2) {
                 molten.add(p);
                 numOfCheese--;
+            } else {
+                ad.add(p);
             }
         }
         for (P p : molten) {
-            hs.remove(p);
             graph[p.y][p.x] = 0;
             markOpenAir(p.x, p.y);
         }
