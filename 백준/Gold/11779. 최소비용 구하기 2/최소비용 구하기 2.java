@@ -76,15 +76,12 @@ public class Main {
         costs = new int[n + 1];
         Arrays.fill(costs, INF);
         costs[start] = 0;
-        visited = new boolean[n + 1];
         Queue<Node> pq = new PriorityQueue<>(new Comparator<Node>() {
             @Override
             public int compare(Node o1, Node o2) {
                 return o1.cost - o2.cost;
             }
         });
-        List<Integer> tmp = new ArrayList<>();
-        tmp.add(start);
         pq.add(new Node(start, 0));
 
         while (!pq.isEmpty()) {
@@ -94,11 +91,10 @@ public class Main {
                 return;
             }
 
-            if (visited[cur.v]) continue;
-            visited[cur.v] = true;
+            if (cur.cost > costs[cur.v]) continue;
 
             for (Node next : adj[cur.v]) {
-                if (!visited[next.v] && costs[cur.v] + next.cost <= costs[next.v]) {
+                if (costs[cur.v] + next.cost < costs[next.v]) {
                     costs[next.v] = costs[cur.v] + next.cost;
                     path[next.v] = cur.v;
                     pq.add(new Node(next.v, costs[next.v]));
