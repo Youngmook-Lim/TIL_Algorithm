@@ -17,6 +17,7 @@ public class Main {
     static int[][] graph;
     static boolean[][] isOpenAir;
     static Queue<P> ad;
+    static Queue<P> molten;
 
     static class P {
         int x, y;
@@ -36,6 +37,7 @@ public class Main {
         graph = new int[n][m];
         isOpenAir = new boolean[n][m];
         ad = new ArrayDeque<>();
+        molten = new ArrayDeque<>();
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
@@ -59,7 +61,7 @@ public class Main {
     }
 
     static void meltTheCheese() {
-        Queue<P> molten = new ArrayDeque<>();
+
         int size = ad.size();
         for (int i = 0; i < size; i++) {
             P p = ad.poll();
@@ -76,7 +78,8 @@ public class Main {
                 ad.add(p);
             }
         }
-        for (P p : molten) {
+        while (!molten.isEmpty()) {
+            P p = molten.poll();
             graph[p.y][p.x] = 0;
             markOpenAir(p.x, p.y);
         }
