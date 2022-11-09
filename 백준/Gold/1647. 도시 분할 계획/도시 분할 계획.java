@@ -8,11 +8,10 @@ import java.util.*;
  * */
 public class Main {
 
-    static int n, m, pick, ans;
+    static int n, m, pick, ans, max;
     static List<N>[] adj;
     static boolean[] visited;
     static int[] dist;
-    static TreeSet<Integer> ts;
 
     static class N {
         int v, dist;
@@ -49,11 +48,12 @@ public class Main {
             adj[b].add(new N(a, c));
         }
         visited = new boolean[n + 1];
-        ts = new TreeSet<>();
+        dist = new int[n + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
 
         prim(1);
 
-        System.out.println(ans - ts.last());
+        System.out.println(ans - max);
 
         br.close();
     }
@@ -74,11 +74,12 @@ public class Main {
 //            System.out.println(cur);
 
             ans += cur.dist;
-            ts.add(cur.dist);
+            max = Math.max(max, cur.dist);
             pick++;
 
             for (N next : adj[cur.v]) {
-                if (!visited[next.v]) {
+                if (!visited[next.v] && next.dist < dist[next.v]) {
+                    dist[next.v] = next.dist;
                     pq.add(next);
                 }
             }
