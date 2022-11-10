@@ -32,6 +32,8 @@ public class Main {
             }
         }
 
+        visited[0][0] = true;
+        alphabet[graph[0][0] - 'A'] = true;
         dfs(0, 0, 1);
 
         System.out.println(ans);
@@ -41,23 +43,24 @@ public class Main {
 
     static void dfs(int x, int y, int len) {
 
-        if (alphabet[graph[y][x] - 'A']) return;
-
         ans = Math.max(ans, len);
-        visited[y][x] = true;
-        alphabet[graph[y][x] - 'A'] = true;
 
         for (int k = 0; k < 4; k++) {
             int nx = x + dx[k];
             int ny = y + dy[k];
 
             if (nx < 0 || nx >= c || ny < 0 || ny >= r || visited[ny][nx]) continue;
+            if (alphabet[graph[ny][nx] - 'A']) continue;
+
+            visited[ny][nx] = true;
+            alphabet[graph[ny][nx] - 'A'] = true;
 
             dfs(nx, ny, len + 1);
+
+            alphabet[graph[ny][nx] - 'A'] = false;
+            visited[ny][nx] = false;
         }
 
-        alphabet[graph[y][x] - 'A'] = false;
-        visited[y][x] = false;
 
     }
 
