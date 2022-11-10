@@ -26,10 +26,8 @@ public class Main {
         visited = new boolean[r][c];
 
         for (int i = 0; i < r; i++) {
-            String tmp = br.readLine();
-            for (int j = 0; j < c; j++) {
-                graph[i][j] = tmp.charAt(j);
-            }
+            graph[i] = br.readLine().toCharArray();
+
         }
 
         visited[0][0] = true;
