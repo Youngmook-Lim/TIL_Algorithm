@@ -7,7 +7,6 @@ public class Main {
 
     static int r, c, ans;
     static char[][] graph;
-    static boolean[][] visited;
     static boolean[] alphabet = new boolean[26];
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
@@ -23,14 +22,11 @@ public class Main {
         c = Integer.parseInt(st.nextToken());
 
         graph = new char[r][c];
-        visited = new boolean[r][c];
 
         for (int i = 0; i < r; i++) {
             graph[i] = br.readLine().toCharArray();
-
         }
 
-        visited[0][0] = true;
         alphabet[graph[0][0] - 'A'] = true;
         dfs(0, 0, 1);
 
@@ -47,16 +43,14 @@ public class Main {
             int nx = x + dx[k];
             int ny = y + dy[k];
 
-            if (nx < 0 || nx >= c || ny < 0 || ny >= r || visited[ny][nx]) continue;
+            if (nx < 0 || nx >= c || ny < 0 || ny >= r) continue;
             if (alphabet[graph[ny][nx] - 'A']) continue;
 
-            visited[ny][nx] = true;
             alphabet[graph[ny][nx] - 'A'] = true;
 
             dfs(nx, ny, len + 1);
 
             alphabet[graph[ny][nx] - 'A'] = false;
-            visited[ny][nx] = false;
         }
 
 
