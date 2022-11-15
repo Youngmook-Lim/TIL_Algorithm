@@ -2,152 +2,162 @@ import java.util.*;
 import java.io.*;
 
 class Main {
-    static class Shark {
-        int x, y, dir, eatSum;
 
-        Shark() {
-        }
+    static int[][] graph;
+    static Fish[] fishes;
+    static int[] dx = {0, -1, -1, -1, 0, 1, 1, 1};
+    static int[] dy = {-1, -1, 0, 1, 1, 1, 0, -1};
+    static int ans, sx, sy, sd;
 
-        Shark(int x, int y, int dir, int eatSum) {
-            this.x = x;
-            this.y = y;
-            this.dir = dir;
-            this.eatSum = eatSum;
-        }
-    }
 
     static class Fish {
-        int x, y, id, dir;
-        boolean isAlive = true;
+        int n, x, y, dir;
+        boolean isAlive;
 
-        Fish() {
-        }
-
-        Fish(int x, int y, int id, int dir, boolean isAlive) {
+        public Fish(int n, int x, int y, int dir, boolean isAlive) {
+            this.n = n;
             this.x = x;
             this.y = y;
-            this.id = id;
             this.dir = dir;
             this.isAlive = isAlive;
         }
-    }
 
-    static int[] dx = {-1, -1, 0, 1, 1, 1, 0, -1};
-    static int[] dy = {0, -1, -1, -1, 0, 1, 1, 1};
-    static int maxSum = 0;
+        @Override
+        public String toString() {
+            return "Fish{" +
+                    "n=" + n +
+                    ", x=" + x +
+                    ", y=" + y +
+                    ", dir=" + dir +
+                    ", isAlive=" + isAlive +
+                    '}';
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        int[][] arr = new int[4][4];
-        List<Fish> fishes = new ArrayList<>();
-
-        // input
+        graph = new int[4][4];
+        fishes = new Fish[17];
         for (int i = 0; i < 4; i++) {
             st = new StringTokenizer(br.readLine());
-
             for (int j = 0; j < 4; j++) {
-                Fish f = new Fish();
-                f.id = Integer.parseInt(st.nextToken());
-                f.dir = Integer.parseInt(st.nextToken()) - 1;
-                f.x = i;
-                f.y = j;
-
-                fishes.add(f);
-                arr[i][j] = f.id;
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken()) - 1;
+                graph[i][j] = a;
+                fishes[a] = new Fish(a, j, i, b, true);
             }
         }
 
-        Collections.sort(fishes, new Comparator<Fish>() {
-            @Override
-            public int compare(Fish o1, Fish o2) {
-                return o1.id - o2.id;
-            }
-        });
+        eatFirstFish();
+        dfs(ans);
 
-        Fish f = fishes.get(arr[0][0] - 1);
-        Shark shark = new Shark(0, 0, f.dir, f.id);
-        f.isAlive = false;
-        arr[0][0] = -1;
+        System.out.println(ans);
 
-        // solution
-        dfs(arr, shark, fishes);
-        System.out.println(maxSum);
+        br.close();
+
     }
 
-    static void dfs(int[][] arr, Shark shark, List<Fish> fishes) {
-        if (maxSum < shark.eatSum) {
-            maxSum = shark.eatSum;
+    static void dfs(int eat) {
+        ans = Math.max(ans, eat);
+        int[][] graphCopy = new int[4][4];
+        for (int i = 0; i < 4; i++) {
+            System.arraycopy(graph[i], 0, graphCopy[i], 0, 4);
+        }
+        Fish[] fishesCopy = new Fish[17];
+        for (int i = 1; i < 17; i++) {
+            fishesCopy[i] = new Fish(fishes[i].n, fishes[i].x, fishes[i].y, fishes[i].dir, fishes[i].isAlive);
         }
 
-        fishes.forEach(e -> moveFish(e, arr, fishes));
+//        for (int[] x : graph) {
+//            System.out.println(Arrays.toString(x));
+//        }
+//        System.out.println(eat);
+        moveFish();
+//        for (int[] x : graph) {
+//            System.out.println(Arrays.toString(x));
+//        }
+//        System.out.println(Arrays.toString(fishes));
+//        System.out.println();
 
-        for (int dist = 1; dist < 4; dist++) {
-            int nx = shark.x + dx[shark.dir] * dist;
-            int ny = shark.y + dy[shark.dir] * dist;
 
-            if (0 <= nx && nx < 4 && 0 <= ny && ny < 4 && arr[nx][ny] > 0) {
-                int[][] arrCopies = copyArr(arr);
-                List<Fish> fishCopies = copyFishes(fishes);
+        for (int i = 1; i <= 3; i++) {
+            int nx = sx + dx[sd] * i;
+            int ny = sy + dy[sd] * i;
 
-                arrCopies[shark.x][shark.y] = 0;
-                Fish f = fishCopies.get(arr[nx][ny] - 1);
-                Shark newShark = new Shark(f.x, f.y, f.dir, shark.eatSum + f.id);
-                f.isAlive = false;
-                arrCopies[f.x][f.y] = -1;
+            if (nx < 0 || nx >= 4 || ny < 0 || ny >= 4 || graph[ny][nx] == 0) continue;
 
-                dfs(arrCopies, newShark, fishCopies);
-            }
+            int orgSd = sd;
+            int orgSx = sx;
+            int orgSy = sy;
+            int eatNum = graph[ny][nx];
+            Fish targetFish = fishes[eatNum];
+            fishes[eatNum].isAlive = false;
+//            targetFish.isAlive = false;
+            graph[sy][sx] = 0;
+            sd = targetFish.dir;
+            sx = targetFish.x;
+            sy = targetFish.y;
+            graph[ny][nx] = -1;
+
+            dfs(eat + targetFish.n);
+
+            fishes[eatNum].isAlive = true;
+            targetFish.isAlive = true;
+            sd = orgSd;
+            sx = orgSx;
+            sy = orgSy;
+            graph[sy][sx] = -1;
+            graph[ny][nx] = targetFish.n;
+
+        }
+
+        for (int i = 0; i < 4; i++) {
+            System.arraycopy(graphCopy[i], 0, graph[i], 0, 4);
+        }
+        for (int i = 1; i < 17; i++) {
+            fishes[i] = new Fish(fishesCopy[i].n, fishesCopy[i].x, fishesCopy[i].y, fishesCopy[i].dir, fishesCopy[i].isAlive);
         }
     }
 
-    static void moveFish(Fish fish, int[][] arr, List<Fish> fishes) {
-        if (fish.isAlive == false) return;
+    static void moveFish() {
+        for (int i = 1; i < 17; i++) {
+            Fish fish = fishes[i];
+            if (!fish.isAlive) continue;
+            for (int k = 0; k < 8; k++) {
+                int nx = fish.x + dx[(fish.dir + k) % 8];
+                int ny = fish.y + dy[(fish.dir + k) % 8];
 
-        for (int i = 0; i < 8; i++) {
-            int nextDir = (fish.dir + i) % 8;
-            int nx = fish.x + dx[nextDir];
-            int ny = fish.y + dy[nextDir];
-
-            if (0 <= nx && nx < 4 && 0 <= ny && ny < 4 && arr[nx][ny] > -1) {
-                arr[fish.x][fish.y] = 0;
-
-                if (arr[nx][ny] == 0) {
+                if (nx < 0 || nx >= 4 || ny < 0 || ny >= 4 || graph[ny][nx] == -1) continue;
+                fish.dir = (fish.dir + k) % 8;
+                if (graph[ny][nx] == 0) {
+                    graph[fish.y][fish.x] = 0;
                     fish.x = nx;
                     fish.y = ny;
+                    graph[ny][nx] = fish.n;
                 } else {
-                    Fish temp = fishes.get(arr[nx][ny] - 1);
-                    temp.x = fish.x;
-                    temp.y = fish.y;
-                    arr[fish.x][fish.y] = temp.id;
-
+                    Fish swapFish = fishes[graph[ny][nx]];
+                    int tmp = graph[fish.y][fish.x];
+                    graph[fish.y][fish.x] = graph[ny][nx];
+                    graph[ny][nx] = tmp;
+                    swapFish.x = fish.x;
+                    swapFish.y = fish.y;
                     fish.x = nx;
                     fish.y = ny;
                 }
-
-                arr[nx][ny] = fish.id;
-                fish.dir = nextDir;
-                return;
+                break;
             }
         }
     }
 
-    static int[][] copyArr(int[][] arr) {
-        int[][] temp = new int[4][4];
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                temp[i][j] = arr[i][j];
-            }
-        }
-
-        return temp;
+    static void eatFirstFish() {
+        int firstFish = graph[0][0];
+        sd = fishes[firstFish].dir;
+        sx = sy = 0;
+        fishes[firstFish].isAlive = false;
+        ans += firstFish;
+        graph[0][0] = -1;
     }
 
-    static List<Fish> copyFishes(List<Fish> fishes) {
-        List<Fish> temp = new ArrayList<>();
-        fishes.forEach(e -> temp.add(new Fish(e.x, e.y, e.id, e.dir, e.isAlive)));
-        return temp;
-    }
 }
