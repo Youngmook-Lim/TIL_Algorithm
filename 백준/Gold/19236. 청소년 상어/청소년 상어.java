@@ -21,17 +21,6 @@ class Main {
             this.dir = dir;
             this.isAlive = isAlive;
         }
-
-        @Override
-        public String toString() {
-            return "Fish{" +
-                    "n=" + n +
-                    ", x=" + x +
-                    ", y=" + y +
-                    ", dir=" + dir +
-                    ", isAlive=" + isAlive +
-                    '}';
-        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -69,18 +58,8 @@ class Main {
         for (int i = 1; i < 17; i++) {
             fishesCopy[i] = new Fish(fishes[i].n, fishes[i].x, fishes[i].y, fishes[i].dir, fishes[i].isAlive);
         }
-
-//        for (int[] x : graph) {
-//            System.out.println(Arrays.toString(x));
-//        }
-//        System.out.println(eat);
+        
         moveFish();
-//        for (int[] x : graph) {
-//            System.out.println(Arrays.toString(x));
-//        }
-//        System.out.println(Arrays.toString(fishes));
-//        System.out.println();
-
 
         for (int i = 1; i <= 3; i++) {
             int nx = sx + dx[sd] * i;
@@ -104,7 +83,7 @@ class Main {
             dfs(eat + targetFish.n);
 
             fishes[eatNum].isAlive = true;
-            targetFish.isAlive = true;
+//            targetFish.isAlive = true;
             sd = orgSd;
             sx = orgSx;
             sy = orgSy;
