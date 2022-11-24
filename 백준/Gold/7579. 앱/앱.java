@@ -1,12 +1,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 class Main {
 
-    static final int INF = 987654321;
-    static int n, m;
+    static int n, m, totalCost;
     static int[] bytes, cost;
     static int[][] dp;
 
@@ -18,7 +16,6 @@ class Main {
 
         bytes = new int[n + 1];
         cost = new int[n + 1];
-        dp = new int[2][m + 1];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 1; i < n + 1; i++) {
@@ -27,26 +24,28 @@ class Main {
         st = new StringTokenizer(br.readLine());
         for (int i = 1; i < n + 1; i++) {
             cost[i] = Integer.parseInt(st.nextToken());
+            totalCost += cost[i];
         }
 
-        for (int i = 0; i < 2; i++) {
-            Arrays.fill(dp[i], INF);
-        }
+        dp = new int[n + 1][totalCost + 1];
 
         for (int i = 1; i < n + 1; i++) {
-            for (int j = 1; j < m + 1; j++) {
-                if (bytes[i] < j) {
-                    dp[1][j] = Math.min(dp[0][j], dp[0][j - bytes[i]] + cost[i]);
+            for (int j = 1; j < totalCost + 1; j++) {
+                if (cost[i] > j) {
+                    dp[i][j] = dp[i - 1][j];
                 } else {
-                    dp[1][j] = Math.min(cost[i], dp[0][j]);
+                    dp[i][j] = Math.max(dp[i - 1][j], bytes[i] + dp[i - 1][j - cost[i]]);
                 }
-            }
-            for (int j = 1; j < m + 1; j++) {
-                dp[0][j] = dp[1][j];
             }
         }
 
-        System.out.println(dp[1][m]);
+        for (int i = 1; i < totalCost + 1; i++) {
+            if (dp[n][i] >= m) {
+                System.out.println(i);
+                break;
+            }
+        }
+
 
         br.close();
 
