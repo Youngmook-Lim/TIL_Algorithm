@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 class Main {
@@ -10,13 +9,8 @@ class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-
-        memo = new int[101][101][101];
-        for (int i = 0; i < 101; i++) {
-            for (int j = 0; j < 101; j++) {
-                Arrays.fill(memo[i][j], Integer.MAX_VALUE);
-            }
-        }
+        StringBuilder sb = new StringBuilder();
+        memo = new int[21][21][21];
 
         while (true) {
             st = new StringTokenizer(br.readLine());
@@ -24,36 +18,35 @@ class Main {
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
 
-
             if (a == -1 && b == -1 && c == -1) break;
 
-            System.out.printf("w(%d, %d, %d) = ", a, b, c);
-            System.out.println(w(a, b, c));
+            sb.append("w(" + a + ", " + b + ", " + c + ") = " + w(a, b, c)).append('\n');
         }
+
+        System.out.println(sb);
 
         br.close();
 
     }
 
     static int w(int a, int b, int c) {
-        if (memo[a + 50][b + 50][c + 50] != Integer.MAX_VALUE) {
-            return memo[a + 50][b + 50][c + 50];
-        } else {
-            if (a <= 0 || b <= 0 || c <= 0) {
-                memo[a + 50][b + 50][c + 50] = 1;
-                return memo[a + 50][b + 50][c + 50];
-            }
-            if (a > 20 || b > 20 || c > 20) {
-                memo[a + 50][b + 50][c + 50] = w(20, 20, 20);
-                return memo[a + 50][b + 50][c + 50];
-            }
-            if (a < b && b < c) {
-                memo[a + 50][b + 50][c + 50] = w(a, b, c - 1) + w(a, b - 1, c - 1) - w(a, b - 1, c);
-                return memo[a + 50][b + 50][c + 50];
-            }
-            memo[a + 50][b + 50][c + 50] = w(a - 1, b, c) + w(a - 1, b - 1, c) + w(a - 1, b, c - 1) - w(a - 1, b - 1, c - 1);
-            return memo[a + 50][b + 50][c + 50];
+
+        if (a <= 0 || b <= 0 || c <= 0) {
+            return 1;
         }
+        if (a > 20 || b > 20 || c > 20) {
+            return w(20, 20, 20);
+        }
+
+        if (memo[a][b][c] != 0) {
+            return memo[a][b][c];
+        }
+
+        if (a < b && b < c) {
+            return memo[a][b][c] = w(a, b, c - 1) + w(a, b - 1, c - 1) - w(a, b - 1, c);
+        }
+        return memo[a][b][c] = w(a - 1, b, c) + w(a - 1, b - 1, c) + w(a - 1, b, c - 1) - w(a - 1, b - 1, c - 1);
+
     }
 
 
