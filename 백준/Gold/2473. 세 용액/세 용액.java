@@ -6,8 +6,7 @@ import java.util.*;
 class Main {
 
     static int n;
-    static long[] arr;
-    static List<Long> ans;
+    static long[] arr, ans;
     static boolean flag;
     static long minAbsSum;
 
@@ -17,7 +16,7 @@ class Main {
 
         n = Integer.parseInt(br.readLine());
         arr = new long[n];
-        ans = new ArrayList<>();
+        ans = new long[n];
         minAbsSum = Long.MAX_VALUE;
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
@@ -49,10 +48,9 @@ class Main {
 
         if (Math.abs(sum) < minAbsSum) {
             minAbsSum = Math.abs(sum);
-            ans.clear();
-            ans.add(num);
-            ans.add(arr[start]);
-            ans.add(arr[end]);
+            ans[0] = num;
+            ans[1] = arr[start];
+            ans[2] = arr[end];
         }
 
         if (sum == 0) {
