@@ -8,6 +8,7 @@ class Main {
     static int n;
     static long[] arr;
     static List<Long> ans;
+    static boolean flag;
     static long minAbsSum;
 
     public static void main(String[] args) throws Exception {
@@ -40,6 +41,7 @@ class Main {
     }
 
     static void find(long num, int start, int end) {
+        if (flag) return;
         if (start >= end) return;
 
         long sum = num + arr[start] + arr[end];
@@ -52,7 +54,9 @@ class Main {
             ans.add(arr[end]);
         }
 
-        if (sum > 0) {
+        if (sum == 0) {
+            flag = true;
+        } else if (sum > 0) {
             find(num, start, end - 1);
         } else {
             find(num, start + 1, end);
