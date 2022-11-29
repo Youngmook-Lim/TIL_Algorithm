@@ -28,6 +28,7 @@ class Main {
 
         for (int i = 0; i < n - 2; i++) {
             find(arr[i], i + 1, n - 1);
+            if (flag) break;
         }
 
         StringBuilder sb = new StringBuilder();
