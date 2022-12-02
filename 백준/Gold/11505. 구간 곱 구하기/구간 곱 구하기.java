@@ -12,22 +12,16 @@ public class Main {
     static class SegmentTree {
         long[] inputTree;
         long[] resultTree;
-        int treeIdx = 1;
         int level;
         int size;
-        int inputStart = 0;
-        int inputEnd;
-        int inputSize;
 
         SegmentTree(long[] inputTree) {
             this.inputTree = inputTree;
-            this.inputSize = inputTree.length;
-            this.inputEnd = inputSize - 1;
-            this.level = (int) (Math.ceil(Math.log(this.inputSize + 1) / Math.log(2)) + 1);
+            this.level = (int) (Math.ceil(Math.log(inputTree.length) / Math.log(2)) + 1);
             this.size = (int) Math.pow(2, this.level);
             this.resultTree = new long[this.size];
 
-            this.make(this.inputStart, this.inputEnd, this.treeIdx);
+            this.make(0, inputTree.length - 1, 1);
         }
 
         long make(int start, int end, int treeIdx) {
@@ -103,10 +97,10 @@ public class Main {
             int b = Integer.parseInt(st.nextToken());
             if (a == 1) {
                 long c = Long.parseLong(st.nextToken());
-                sgmt.update(sgmt.inputStart, sgmt.inputEnd, sgmt.treeIdx, b - 1, c);
+                sgmt.update(0, n - 1, 1, b - 1, c);
             } else {
                 int c = Integer.parseInt(st.nextToken());
-                long result = sgmt.getRange(sgmt.inputStart, sgmt.inputEnd, sgmt.treeIdx, b - 1, c - 1);
+                long result = sgmt.getRange(0, n - 1, 1, b - 1, c - 1);
                 sb.append(result).append('\n');
             }
         }
