@@ -8,7 +8,7 @@
 
 ### 분류
 
-기하학(geometry)
+기하학(geometry), 수학(math)
 
 ### 문제 설명
 
