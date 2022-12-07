@@ -6,8 +6,7 @@ import java.util.*;
 public class Main {
 
     static int n, m;
-    static Map<Integer, Integer> depth;
-    static Map<Integer, Integer> childParent;
+    static int[] depth, childParent;
     static List<Integer>[] adj;
     static boolean[] visited;
 
@@ -17,11 +16,11 @@ public class Main {
         StringTokenizer st;
         StringBuilder sb = new StringBuilder();
 
-        depth = new HashMap<>();
-        childParent = new HashMap<>();
-        childParent.put(1, 1);
-
         n = Integer.parseInt(br.readLine());
+        depth = new int[n + 1];
+        childParent = new int[n + 1];
+        childParent[1] = 1;
+
         adj = new List[n + 1];
         for (int i = 1; i < n + 1; i++) {
             adj[i] = new ArrayList<>();
@@ -53,33 +52,41 @@ public class Main {
 
     static void markDepth(int cur, int curDepth) {
         visited[cur] = true;
-        depth.put(cur, curDepth);
+        depth[cur] = curDepth;
 
         for (int next : adj[cur]) {
             if (!visited[next]) {
-                childParent.put(next, cur);
+                childParent[next] = cur;
                 markDepth(next, curDepth + 1);
             }
         }
     }
 
     static int lca(int a, int b) {
+        int depthA = depth[a];
+        int depthB = depth[b];
+        int parentA = childParent[a];
+        int parentB = childParent[b];
+
+        if (depthA > depthB) {
+            while (depthA != depthB) {
+                a = parentA;
+                parentA = childParent[a];
+                depthA--;
+            }
+        } else if (depthA < depthB) {
+            while (depthB != depthA) {
+                b = parentB;
+                parentB = childParent[b];
+                depthB--;
+            }
+        }
+
         if (a == b) return a;
         if (a == 1 || b == 1) return 1;
 
-        int depthA = depth.get(a);
-        int depthB = depth.get(b);
-        int parentA = childParent.get(a);
-        int parentB = childParent.get(b);
-        if (depthA == depthB) {
-            return lca(parentA, parentB);
-        } else {
-            if (depthA > depthB) {
-                return lca(parentA, b);
-            } else {
-                return lca(a, parentB);
-            }
-        }
+        return lca(parentA, parentB);
+
     }
 
 }
