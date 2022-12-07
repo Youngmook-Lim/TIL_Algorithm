@@ -19,7 +19,6 @@ public class Main {
         n = Integer.parseInt(br.readLine());
         depth = new int[n + 1];
         childParent = new int[n + 1];
-        childParent[1] = 1;
 
         adj = new List[n + 1];
         for (int i = 1; i < n + 1; i++) {
@@ -65,27 +64,25 @@ public class Main {
     static int lca(int a, int b) {
         int depthA = depth[a];
         int depthB = depth[b];
-        int parentA = childParent[a];
-        int parentB = childParent[b];
 
         if (depthA > depthB) {
             while (depthA != depthB) {
-                a = parentA;
-                parentA = childParent[a];
+                a = childParent[a];
                 depthA--;
             }
         } else if (depthA < depthB) {
             while (depthB != depthA) {
-                b = parentB;
-                parentB = childParent[b];
+                b = childParent[b];
                 depthB--;
             }
         }
 
-        if (a == b) return a;
-        if (a == 1 || b == 1) return 1;
+        while (a != b) {
+            a = childParent[a];
+            b = childParent[b];
+        }
 
-        return lca(parentA, parentB);
+        return a;
 
     }
 
