@@ -7,7 +7,7 @@ public class Main {
 
     static int n;
     static int[] arr;
-    static TreeSet<Integer> ts;
+    static List<Integer> list;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,24 +19,33 @@ public class Main {
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
-        ts = new TreeSet<>();
+        list = new ArrayList<>();
+
         for (int i = 0; i < n; i++) {
-            if (i == 0) {
-                ts.add(arr[i]);
+            if (i == 0 || list.get(list.size() - 1) < arr[i]) {
+                list.add(arr[i]);
             } else {
-                if (arr[i] > ts.last()) {
-                    ts.add(arr[i]);
-                } else {
-                    ts.remove(ts.ceiling(arr[i]));
-                    ts.add(arr[i]);
-                }
+                int idx = findIdx(0, list.size() - 1, arr[i]);
+                list.set(idx, arr[i]);
             }
         }
 
-        System.out.println(ts.size());
+        System.out.println(list.size());
 
         br.close();
     }
 
+    static int findIdx(int start, int end, int target) {
+        if (start > end) {
+            return start;
+        }
+
+        int mid = (start + end) / 2;
+        if (list.get(mid) >= target) {
+            return findIdx(start, mid - 1, target);
+        } else {
+            return findIdx(mid + 1, end, target);
+        }
+    }
 
 }
