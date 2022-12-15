@@ -10,7 +10,7 @@ import java.util.*;
  * */
 public class Main {
 
-    static final double ERROR = 0.01;
+    static final double ERROR = 10000;
     static double x1, y1, x2, y2;
     static double x3, y3, x4, y4;
     static double A1, A2, B1, B2;
@@ -41,8 +41,8 @@ public class Main {
 //        System.out.println("A : " + A1 + " " + A2);
 //        System.out.println("B : " + B1 + " " + B2);
 
-        if (isEqual(A1, A2)) {
-            if (!isEqual(B1, B2)) {
+        if (A1 == A2) {
+            if (B1 != B2) {
                 ans = 0;
             } else {
                 ans = check('0') ? 1 : 0;
@@ -62,8 +62,8 @@ public class Main {
             y0 = A1 * x0 + B1;
         }
 
-        x0 = (double) Math.round(x0 * 10000d) / 10000d;
-        y0 = (double) Math.round(y0 * 10000d) / 10000d;
+        x0 = (double) Math.round(x0 * ERROR) / ERROR;
+        y0 = (double) Math.round(y0 * ERROR) / ERROR;
 
         ans = check('1') ? 1 : 0;
         System.out.println(ans);
@@ -98,10 +98,6 @@ public class Main {
             A2 = Double.MAX_VALUE;
         }
     }
-
-    static boolean isEqual(double a, double b) {
-        double num = a - b;
-        return num <= ERROR && num >= -ERROR;
-    }
+    
 
 }
