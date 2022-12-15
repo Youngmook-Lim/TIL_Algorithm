@@ -10,94 +10,69 @@ import java.util.*;
  * */
 public class Main {
 
-    static final double ERROR = 10000;
-    static double x1, y1, x2, y2;
-    static double x3, y3, x4, y4;
-    static double A1, A2, B1, B2;
-    static double x0, y0;
-    static int ans;
+    static long x1, y1, x2, y2;
+    static long x3, y3, x4, y4;
+    static int p123, p124, p341, p342, res1, res2, ans;
+
+    static class P {
+        long x, y;
+
+        public P(long x, long y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    static P[] p;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        x1 = Double.parseDouble(st.nextToken());
-        y1 = Double.parseDouble(st.nextToken());
-        x2 = Double.parseDouble(st.nextToken());
-        y2 = Double.parseDouble(st.nextToken());
+        x1 = Long.parseLong(st.nextToken());
+        y1 = Long.parseLong(st.nextToken());
+        x2 = Long.parseLong(st.nextToken());
+        y2 = Long.parseLong(st.nextToken());
         st = new StringTokenizer(br.readLine());
-        x3 = Double.parseDouble(st.nextToken());
-        y3 = Double.parseDouble(st.nextToken());
-        x4 = Double.parseDouble(st.nextToken());
-        y4 = Double.parseDouble(st.nextToken());
+        x3 = Long.parseLong(st.nextToken());
+        y3 = Long.parseLong(st.nextToken());
+        x4 = Long.parseLong(st.nextToken());
+        y4 = Long.parseLong(st.nextToken());
+        ans = 0;
 
-        getSlopes();
+        p = new P[4];
+        p[0] = new P(x1, y1);
+        p[1] = new P(x2, y2);
+        p[2] = new P(x3, y3);
+        p[3] = new P(x4, y4);
 
-        if (A1 != Double.MAX_VALUE) {
-            B1 = y1 - A1 * x1;
-        }
-        if (A2 != Double.MAX_VALUE) {
-            B2 = y3 - A2 * x3;
-        }
-//        System.out.println("A : " + A1 + " " + A2);
-//        System.out.println("B : " + B1 + " " + B2);
+        p123 = ccw(p[0], p[1], p[2]);
+        p124 = ccw(p[0], p[1], p[3]);
+        p341 = ccw(p[2], p[3], p[0]);
+        p342 = ccw(p[2], p[3], p[1]);
 
-        if (A1 == A2) {
-            if (B1 != B2) {
-                ans = 0;
-            } else {
-                ans = check('0') ? 1 : 0;
+        res1 = p123 * p124;
+        res2 = p341 * p342;
+
+        if (res1 == 0 && res2 == 0) {
+            boolean resultX = Math.max(Math.min(p[0].x, p[1].x), Math.min(p[2].x, p[3].x))
+                    <= Math.min(Math.max(p[0].x, p[1].x), Math.max(p[2].x, p[3].x));
+            boolean resultY = Math.max(Math.min(p[0].y, p[1].y), Math.min(p[2].y, p[3].y))
+                    <= Math.min(Math.max(p[0].y, p[1].y), Math.max(p[2].y, p[3].y));
+            if (resultX && resultY) {
+                ans = 1;
             }
-            System.out.println(ans);
-            return;
+        } else if (res1 <= 0 && res2 <= 0) {
+            ans = 1;
         }
 
-        if (A1 == Double.MAX_VALUE) {
-            y0 = A2 * x1 + B2;
-            x0 = x1;
-        } else if (A2 == Double.MAX_VALUE) {
-            y0 = A1 * x3 + B1;
-            x0 = x3;
-        } else {
-            x0 = (B2 - B1) / (A1 - A2);
-            y0 = A1 * x0 + B1;
-        }
-
-        x0 = (double) Math.round(x0 * ERROR) / ERROR;
-        y0 = (double) Math.round(y0 * ERROR) / ERROR;
-
-        ans = check('1') ? 1 : 0;
         System.out.println(ans);
 
         br.close();
     }
 
-    static boolean check(char axis) {
-        if (axis == '1') {
-            return !(y0 < Math.max(Math.min(y1, y2), Math.min(y3, y4))
-                    || y0 > Math.min(Math.max(y1, y2), Math.max(y3, y4))
-                    || x0 < Math.max(Math.min(x1, x2), Math.min(x3, x4))
-                    || x0 > Math.min(Math.max(x1, x2), Math.max(x3, x4)));
-        } else {
-            return Math.max(Math.min(x1, x2), Math.min(x3, x4))
-                    <= Math.min(Math.max(x1, x2), Math.max(x3, x4)) &&
-                    Math.max(Math.min(y1, y2), Math.min(y3, y4))
-                            <= Math.min(Math.max(y1, y2), Math.max(y3, y4));
-        }
+    static int ccw(P a, P b, P c) {
+        long res = (a.x * b.y + b.x * c.y + c.x * a.y) - (b.x * a.y + c.x * b.y + a.x * c.y);
+        return (res > 0) ? 1 : (res == 0) ? 0 : -1;
     }
-
-    static void getSlopes() {
-        if (x1 != x2) {
-            A1 = (y2 - y1) / (x2 - x1);
-        } else {
-            A1 = Double.MAX_VALUE;
-        }
-
-        if (x3 != x4) {
-            A2 = (y4 - y3) / (x4 - x3);
-        } else {
-            A2 = Double.MAX_VALUE;
-        }
-    }
-    
 
 }
