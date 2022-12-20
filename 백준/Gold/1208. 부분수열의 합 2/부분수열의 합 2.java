@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
@@ -11,6 +8,7 @@ public class Main {
     static long ans;
     static int[] arr;
     static List<Integer> listLeft, listRight;
+    static Map<Integer, Integer> hashMap;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,16 +21,11 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        listLeft = new ArrayList<>();
-        listRight = new ArrayList<>();
+        hashMap = new HashMap<>();
 
-        createPowerSet(0, n / 2, listLeft);
-        createPowerSet(n / 2 + 1, n - 1, listRight);
+        createPowerSet(0, n / 2, 1);
+        createPowerSet(n / 2 + 1, n - 1, 2);
 
-        Collections.sort(listLeft);
-        Collections.sort(listRight);
-
-        calculate();
 
         if (s == 0) {
             ans--;
@@ -43,44 +36,20 @@ public class Main {
         br.close();
     }
 
-    static void calculate() {
-        int pointerL = 0;
-        int pointerR = listRight.size() - 1;
-
-        while (pointerL < listLeft.size() && pointerR >= 0) {
-            int lSum = listLeft.get(pointerL);
-            int rSum = listRight.get(pointerR);
-            long sum = lSum + rSum;
-            if (sum == s) {
-                long rCnt = 0;
-                long lCnt = 0;
-                while (pointerL < listLeft.size() && listLeft.get(pointerL) == lSum) {
-                    lCnt++;
-                    pointerL++;
-                }
-                while (pointerR >= 0 && listRight.get(pointerR) == rSum) {
-                    rCnt++;
-                    pointerR--;
-                }
-                ans += lCnt * rCnt;
-            } else if (sum > s) {
-                pointerR--;
-            } else {
-                pointerL++;
-            }
-        }
-    }
-
-    static void createPowerSet(int start, int end, List<Integer> list) {
+    static void createPowerSet(int start, int end, int type) {
         int num = end - start + 1;
         for (int i = 0; i < (1 << num); i++) {
-            int tmp = 0;
+            int sum = 0;
             for (int j = 0; j < num; j++) {
                 if ((i & (1 << j)) != 0) {
-                    tmp += arr[start + j];
+                    sum += arr[start + j];
                 }
             }
-            list.add(tmp);
+            if (type == 1) {
+                hashMap.put(sum, hashMap.getOrDefault(sum, 0) + 1);
+            } else {
+                ans += hashMap.getOrDefault(s - sum, 0);
+            }
         }
     }
 
