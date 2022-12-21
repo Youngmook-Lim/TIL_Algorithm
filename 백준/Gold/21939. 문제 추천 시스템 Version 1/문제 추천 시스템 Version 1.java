@@ -6,7 +6,7 @@ public class Main {
 
     static int n, m;
     static TreeSet<P> ts;
-    static Map<Integer, Integer> pos;
+    static int[] pos;
 
     static class P implements Comparable<P> {
         int p, l;
@@ -32,13 +32,13 @@ public class Main {
 
         n = Integer.parseInt(br.readLine());
         ts = new TreeSet<>();
-        pos = new HashMap<>();
+        pos = new int[100_001];
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int p = Integer.parseInt(st.nextToken());
             int l = Integer.parseInt(st.nextToken());
             ts.add(new P(p, l));
-            pos.put(p, l);
+            pos[p] = l;
         }
 
         m = Integer.parseInt(br.readLine());
@@ -56,12 +56,10 @@ public class Main {
                 int p = Integer.parseInt(st.nextToken());
                 int l = Integer.parseInt(st.nextToken());
                 ts.add(new P(p, l));
-                pos.put(p, l);
+                pos[p] = l;
             } else {
                 int p = Integer.parseInt(st.nextToken());
-                P rm = new P(p, pos.get(p));
-                ts.remove(rm);
-                pos.remove(p);
+                ts.remove(new P(p, pos[p]));
             }
         }
 
