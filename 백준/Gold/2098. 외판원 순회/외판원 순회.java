@@ -22,9 +22,6 @@ public class Main {
             }
         }
         ans = INF;
-        for (int[] x : memo) {
-            Arrays.fill(x, -1);
-        }
 
         for (int i = 1; i < n; i++) {
             int dist = getShortestDistance(i, (1 << n) - 1);
@@ -45,7 +42,7 @@ public class Main {
             }
             return adj[0][destination];
         }
-        if (memo[destination][visited] != -1) {
+        if (memo[destination][visited] != 0) {
             return memo[destination][visited];
         }
 
