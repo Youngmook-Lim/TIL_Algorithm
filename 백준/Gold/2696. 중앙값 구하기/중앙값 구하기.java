@@ -6,8 +6,7 @@ public class Main {
 
     static int T, m, n;
     static int[] arr;
-    static Queue<Integer> pq;
-    static Queue<Integer> tmp;
+    static Queue<Integer> pqMax, pqMin;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,30 +24,39 @@ public class Main {
                 }
                 arr[i] = Integer.parseInt(st.nextToken());
             }
-            pq = new PriorityQueue<>();
-            tmp = new ArrayDeque<>();
+            pqMax = new PriorityQueue<>(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o2 - o1;
+                }
+            });
+            pqMin = new PriorityQueue<>();
 
             n = m / 2 + 1;
-            sb.append(n).append('\n');
+            sb.append(n);
 
-            for (int i = 0; i < n; i++) {
-                if (i != 0 && i % 10 == 0) {
+            for (int i = 0; i < m; i++) {
+                if (i % 20 == 0) {
                     sb.append('\n');
                 }
-                int idx = i * 2;
-                pq.add(arr[idx]);
-                if (idx > 0) {
-                    pq.add(arr[idx - 1]);
+                if (pqMax.size() == pqMin.size()) {
+                    pqMax.add(arr[i]);
+                } else {
+                    pqMin.add(arr[i]);
                 }
-                idx /= 2;
-                while (idx-- > 0) {
-                    tmp.add(pq.poll());
+                if (!pqMax.isEmpty() && !pqMin.isEmpty()) {
+                    if (pqMax.peek() > pqMin.peek()) {
+                        int max = pqMax.poll();
+                        int min = pqMin.poll();
+                        pqMax.add(min);
+                        pqMin.add(max);
+                    }
                 }
-                sb.append(pq.peek()).append(' ');
-                while (!tmp.isEmpty()) {
-                    pq.add(tmp.poll());
+                if (i % 2 == 0) {
+                    sb.append(pqMax.peek()).append(' ');
                 }
             }
+
             sb.append('\n');
         }
         System.out.println(sb);
