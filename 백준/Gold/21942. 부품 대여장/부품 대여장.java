@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 /*
  * 1. 대여 정보를 하나씩 읽으면서 hashmap에 없으면 추가하고, 있으면 뽑아서 시간 비교한다.
@@ -10,8 +11,9 @@ import java.util.*;
 public class Main {
 
     static int n, l, f;
-    static HashMap<String, Date> hm;
+    static HashMap<String, Long> hm;
     static TreeMap<String, Long> tm;
+    static int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,16 +29,14 @@ public class Main {
         tm = new TreeMap<>();
 
         for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String dateTmp = st.nextToken().concat(" ").concat(st.nextToken());
-            Date curDate = dateFormat.parse(dateTmp);
-            String p = st.nextToken();
-            String m = st.nextToken();
+            String[] input = br.readLine().split(" ");
+            long curDate = convertToMin(input[0], input[1]);
+            String p = input[2];
+            String m = input[3];
             String key = p + "_" + m;
             if (hm.containsKey(key)) {
-                Date rentalDate = hm.get(key);
-                long dateDiff = (curDate.getTime() - rentalDate.getTime()) / 60000;
+                long rentalDate = hm.get(key);
+                long dateDiff = curDate - rentalDate;
                 if (dateDiff > l) {
 //                    System.out.println(curDate);
 //                    System.out.println(rentalDate);
@@ -61,6 +61,23 @@ public class Main {
         System.out.println(sb);
 
         br.close();
+    }
+
+    static long convertToMin(String dateString, String timeString) {
+        String[] date = dateString.split("-");
+        String[] time = timeString.split(":");
+        long month = Integer.parseInt(date[1]);
+        long day = Integer.parseInt(date[2]);
+        long totalDays = 0;
+        for (int i = 0; i < month - 1; i++) {
+            totalDays += days[i];
+        }
+        totalDays += day - 1;
+
+        long hour = Integer.parseInt(time[0]);
+        long min = Integer.parseInt(time[1]);
+
+        return totalDays * 24 * 60 + hour * 60L + min;
     }
 
 }
