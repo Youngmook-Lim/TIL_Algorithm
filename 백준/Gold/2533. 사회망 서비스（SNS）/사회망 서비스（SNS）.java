@@ -39,21 +39,18 @@ public class Main {
         br.close();
     }
 
-    static int[] getEarlyAdaptors(int cur) {
-        if (dp[cur][0] != -1 && dp[cur][1] != -1) {
-            return dp[cur];
-        }
-
+    static void getEarlyAdaptors(int cur) {
+        
         visited[cur] = true;
         dp[cur][0] = 0;
         dp[cur][1] = 1;
 
         for (int x : adj[cur]) {
             if (visited[x]) continue;
-            dp[cur][0] += getEarlyAdaptors(x)[1];
-            dp[cur][1] += Math.min(getEarlyAdaptors(x)[0], getEarlyAdaptors(x)[1]);
+            getEarlyAdaptors(x);
+            dp[cur][0] += dp[x][1];
+            dp[cur][1] += Math.min(dp[x][0], dp[x][1]);
         }
 
-        return dp[cur];
     }
 }
