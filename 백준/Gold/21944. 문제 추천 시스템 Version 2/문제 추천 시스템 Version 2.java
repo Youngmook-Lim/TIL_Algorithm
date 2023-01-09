@@ -35,9 +35,9 @@ public class Main {
         n = Integer.parseInt(br.readLine());
         mainTreeSet = new TreeSet<>();
         categoryTreeSets = new TreeSet[101];
-        for (int i = 0; i < 101; i++) {
-            categoryTreeSets[i] = new TreeSet<>();
-        }
+//        for (int i = 0; i < 101; i++) {
+//            categoryTreeSets[i] = new TreeSet<>();
+//        }
         pList = new P[100001];
 
         for (int i = 0; i < n; i++) {
@@ -51,6 +51,9 @@ public class Main {
             }
             P cur = new P(p, l, g);
             mainTreeSet.add(cur);
+            if (categoryTreeSets[g] == null) {
+                categoryTreeSets[g] = new TreeSet<>();
+            }
             categoryTreeSets[g].add(cur);
             pList[p] = cur;
         }
@@ -71,6 +74,9 @@ public class Main {
                     }
                     P cur = new P(p, l, g);
                     mainTreeSet.add(cur);
+                    if (categoryTreeSets[g] == null) {
+                        categoryTreeSets[g] = new TreeSet<>();
+                    }
                     categoryTreeSets[g].add(cur);
                     pList[p] = cur;
                     break;
