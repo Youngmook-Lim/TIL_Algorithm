@@ -30,6 +30,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
 
         n = Integer.parseInt(br.readLine());
         mainTreeSet = new TreeSet<>();
@@ -81,17 +82,17 @@ public class Main {
                     g = Integer.parseInt(st.nextToken());
                     x = Integer.parseInt(st.nextToken());
                     if (x == 1) {
-                        System.out.println((categoryTreeSets[g].last().p));
+                        sb.append((categoryTreeSets[g].last().p)).append('\n');
                     } else {
-                        System.out.println((categoryTreeSets[g].first().p));
+                        sb.append((categoryTreeSets[g].first().p)).append('\n');
                     }
                     break;
                 case "recommend2":
                     x = Integer.parseInt(st.nextToken());
                     if (x == 1) {
-                        System.out.println((mainTreeSet.last().p));
+                        sb.append((mainTreeSet.last().p)).append('\n');
                     } else {
-                        System.out.println((mainTreeSet.first().p));
+                        sb.append((mainTreeSet.first().p)).append('\n');
                     }
                     break;
                 case "recommend3":
@@ -101,23 +102,24 @@ public class Main {
                         P tmp = new P(0, l, 0);
                         P higher = mainTreeSet.ceiling(tmp);
                         if (higher == null) {
-                            System.out.println((-1));
+                            sb.append((-1)).append('\n');
                         } else {
-                            System.out.println((higher.p));
+                            sb.append((higher.p)).append('\n');
                         }
                     } else {
                         P tmp = new P(0, l, 0);
                         P lower = mainTreeSet.floor(tmp);
                         if (lower == null) {
-                            System.out.println((-1));
+                            sb.append((-1)).append('\n');
                         } else {
-                            System.out.println((lower.p));
+                            sb.append((lower.p)).append('\n');
                         }
                     }
                     break;
             }
         }
 
+        System.out.println(sb);
 
         br.close();
     }
