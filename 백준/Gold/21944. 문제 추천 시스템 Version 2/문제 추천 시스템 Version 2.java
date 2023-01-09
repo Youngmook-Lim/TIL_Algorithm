@@ -49,9 +49,10 @@ public class Main {
                 mainTreeSet.remove(pList[p]);
                 categoryTreeSets[pList[p].g].remove(pList[p]);
             }
-            mainTreeSet.add(new P(p, l, g));
-            categoryTreeSets[g].add(new P(p, l, g));
-            pList[p] = new P(p, l, g);
+            P cur = new P(p, l, g);
+            mainTreeSet.add(cur);
+            categoryTreeSets[g].add(cur);
+            pList[p] = cur;
         }
 
         m = Integer.parseInt(br.readLine());
@@ -68,9 +69,10 @@ public class Main {
                         mainTreeSet.remove(pList[p]);
                         categoryTreeSets[pList[p].g].remove(pList[p]);
                     }
-                    mainTreeSet.add(new P(p, l, g));
-                    categoryTreeSets[g].add(new P(p, l, g));
-                    pList[p] = new P(p, l, g);
+                    P cur = new P(p, l, g);
+                    mainTreeSet.add(cur);
+                    categoryTreeSets[g].add(cur);
+                    pList[p] = cur;
                     break;
                 case "solved":
                     p = Integer.parseInt(st.nextToken());
