@@ -45,13 +45,16 @@ public class Main {
             }
         }
 
+        StringBuilder sb = new StringBuilder();
+
         for (int[] arr : ans) {
             for (int x : arr) {
-                System.out.print(x + " ");
+                sb.append(x).append(' ');
             }
-            System.out.println();
+            sb.append('\n');
         }
 
+        System.out.println(sb);
 
         br.close();
     }
