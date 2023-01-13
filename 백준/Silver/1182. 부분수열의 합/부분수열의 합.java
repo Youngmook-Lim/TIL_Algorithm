@@ -21,26 +21,26 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        dfs();
+        dfs(0, 0);
+        if (s == 0) {
+            cnt--;
+        }
 
         System.out.println(cnt);
 
         br.close();
     }
 
-    static void dfs() {
-        for (int i = 1; i < (1 << n); i++) {
-            int sum = 0;
-            for (int j = 0; j < n; j++) {
-                if ((i & (1 << j)) != 0) {
-                    sum += arr[j];
-                }
-            }
+    static void dfs(int depth, int sum) {
+        if (depth == n) {
             if (sum == s) {
                 cnt++;
             }
+            return;
         }
 
+        dfs(depth + 1, sum);
+        dfs(depth + 1, sum + arr[depth]);
     }
 
 
