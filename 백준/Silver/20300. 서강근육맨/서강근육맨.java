@@ -32,9 +32,9 @@ public class Main {
             ans = Math.max(ans, sum);
         }
 
-        if (n % 2 != 0) {
-            ans = Math.max(ans, arr[n - 1]);
-        }
+//        if (n % 2 != 0) {
+//            ans = Math.max(ans, arr[n - 1]);
+//        }
 
         System.out.println(ans);
 
