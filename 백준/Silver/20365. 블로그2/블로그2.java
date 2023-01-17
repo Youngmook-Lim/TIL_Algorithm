@@ -31,7 +31,7 @@ public class Main {
             }
         }
 
-        System.out.println(Math.min(cntB + cntR, Math.min(1 + cntB, 1 + cntR)));
+        System.out.println(Math.min(1 + cntB, 1 + cntR));
 
         br.close();
     }
