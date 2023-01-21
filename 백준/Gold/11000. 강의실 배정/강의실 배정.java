@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Main {
 
-    static int n, ans;
-    static Queue<P> pq;
-    static Queue<Integer> pq2;
+    static int n;
+    static List<P> list;
+    static Queue<Integer> pq;
 
     static class P implements Comparable<P> {
         int start, end;
@@ -30,25 +30,26 @@ public class Main {
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
+        list = new ArrayList<>();
         pq = new PriorityQueue<>();
-        pq2 = new PriorityQueue<>();
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
-            pq.add(new P(start, end));
+            list.add(new P(start, end));
         }
 
-        while (!pq.isEmpty()) {
-            P p = pq.poll();
-            if (!pq2.isEmpty() && pq2.peek() <= p.start) {
-                pq2.poll();
+        Collections.sort(list);
+
+        for (P p : list) {
+            if (!pq.isEmpty() && pq.peek() <= p.start) {
+                pq.poll();
             }
-            pq2.add(p.end);
+            pq.add(p.end);
         }
 
-        System.out.println(pq2.size());
+        System.out.println(pq.size());
 
         br.close();
     }
