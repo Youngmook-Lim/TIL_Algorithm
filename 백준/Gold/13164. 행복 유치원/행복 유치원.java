@@ -5,7 +5,7 @@ import java.util.*;
 public class Main {
 
     static int n, k, ans;
-    static List<Integer> list;
+    static Queue<Integer> pq;
 
 
     public static void main(String[] args) throws Exception {
@@ -16,7 +16,7 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
-        list = new ArrayList<>();
+        pq = new PriorityQueue<>();
         st = new StringTokenizer(br.readLine());
         int prev = 0;
 
@@ -25,15 +25,13 @@ public class Main {
                 prev = Integer.parseInt(st.nextToken());
             } else {
                 int tmp = Integer.parseInt(st.nextToken());
-                list.add(tmp - prev);
+                pq.add(tmp - prev);
                 prev = tmp;
             }
         }
-
-        Collections.sort(list);
-
+        
         for (int i = 0; i < n - k; i++) {
-            ans += list.get(i);
+            ans += pq.poll();
         }
 
         System.out.println(ans);
