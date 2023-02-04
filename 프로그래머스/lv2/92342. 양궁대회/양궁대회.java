@@ -1,10 +1,11 @@
 import java.util.*;
 
 class Solution {
-    static int[] arr;
-    static int maxDiff;
-    static int N;
-    static boolean flag;
+    
+    int[] arr;
+    int maxDiff;
+    int N;
+    boolean flag;
     
     public int[] solution(int n, int[] info) {
         arr = new int[11];
@@ -19,9 +20,8 @@ class Solution {
         }
     }
     
-    static void dfs(int remaining, long visited, int[] info, int idx) {
+    void dfs(int remaining, long visited, int[] info, int idx) {
         if (remaining == 0) {
-//            System.out.println(Long.toBinaryString(visited));
             calcScores(info, visited, 0, 0);
             return;
         }
@@ -29,10 +29,6 @@ class Solution {
         for (int i = idx; i < 11; i++) {
             if ((visited & (1L << i)) == 0) {
                 if (info[i] + 1 > remaining) {
-//                    System.out.println("sup");
-//                    System.out.println(remaining);
-//                    System.out.println(i);
-//                    System.out.println(Long.toBinaryString(visited));
                     calcScores(info, visited, i, remaining);
                 } else {
                     dfs(remaining - info[i] - 1, visited | (1 << i), info, i + 1);
@@ -42,27 +38,23 @@ class Solution {
 
     }
 
-    static void calcScores(int[] info, long visited, int idx, int remainder) {
+    void calcScores(int[] info, long visited, int idx, int remainder) {
         int apeachScore = 0;
         int ryanScore = 0;
         for (int i = 0; i < 11; i++) {
             if ((visited & (1 << i)) != 0) {
                 ryanScore += 10 - i;
-//                System.out.println(ryanScore);
             } else {
                 if (info[i] != 0) {
                     apeachScore += 10 - i;
-//                    System.out.println(apeachScore);
                 }
             }
         }
-//        System.out.println(ryanScore + " " + apeachScore);
         if (ryanScore > apeachScore) {
             flag = true;
             int diff = ryanScore - apeachScore;
             if (diff > maxDiff) {
                 maxDiff = diff;
-//                System.out.println(Long.toBinaryString(visited));
                 for (int i = 0; i < 11; i++) {
                     if ((visited & (1 << i)) != 0) {
                         arr[i] = info[i] + 1;
@@ -99,7 +91,6 @@ class Solution {
                     }
                 }
             }
-//            System.out.println(Arrays.toString(arr));
         }
 
     }
