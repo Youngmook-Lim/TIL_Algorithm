@@ -40,16 +40,12 @@ public class Main {
         }
 
         System.out.println(sb);
-
-
+        
         br.close();
     }
 
     static void dfs(int start, int cur) {
-        if (start == cur && arr[cur] != cur) {
-
-        }
-
+        
         visited[cur] = true;
 
         if (!visited[arr[cur]] || arr[cur] == start) {
@@ -66,7 +62,6 @@ public class Main {
             visited[cur] = false;
         }
     }
-
 
 }
 
