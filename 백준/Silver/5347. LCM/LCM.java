@@ -15,9 +15,9 @@ public class Main {
         n = Integer.parseInt(br.readLine());
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int gcd = getGcd(a, b);
+            long a = Long.parseLong(st.nextToken());
+            long b = Long.parseLong(st.nextToken());
+            long gcd = getGcd(a, b);
             sb.append(a / gcd * b).append('\n');
         }
         System.out.println(sb);
@@ -25,13 +25,10 @@ public class Main {
         br.close();
     }
 
-    static int getGcd(int a, int b) {
-        while (b != 0) {
-            int tmp = b;
-            b = a % b;
-            a = tmp;
+    static long getGcd(long a, long b) {
+        if (b == 0) {
+            return a;
         }
-        return a;
+        return getGcd(b, a % b);
     }
-
 }
