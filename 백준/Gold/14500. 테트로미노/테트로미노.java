@@ -8,7 +8,7 @@ public class Main {
     static int[][] graph;
     static boolean[][] visited;
     static int n, m;
-    static int ans;
+    static int ans, max;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
 
@@ -27,6 +27,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
                 graph[i][j] = Integer.parseInt(st.nextToken());
+                max = Math.max(max, graph[i][j]);
             }
         }
 
@@ -43,8 +44,11 @@ public class Main {
 
     static void dfs(int x, int y, int total, int cnt) {
         if (cnt == 4) {
-
             ans = Math.max(ans, total);
+            return;
+        }
+
+        if (ans >= total + max * (4 - cnt)) {
             return;
         }
 
