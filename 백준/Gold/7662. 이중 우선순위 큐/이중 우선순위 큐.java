@@ -34,7 +34,7 @@ public class Main {
 
         for (int t = 0; t < T; t++) {
             k = Integer.parseInt(br.readLine());
-            idx = 0;
+            // idx = 0;
             TreeSet<Num> treeSet = new TreeSet<>();
 
             for (int i = 0; i < k; i++) {
