@@ -1,30 +1,26 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class Main {
 
     static int n;
-    static List<Edge> list;
-    static int[] p;
+    static boolean[] visited;
+    static List<Node>[] adj;
     static int pick;
     static long sum;
 
-    static class Edge implements Comparable<Edge> {
-        int start, end, cost;
+    static class Node implements Comparable<Node> {
+        int node, cost;
 
-        public Edge(int start, int end, int cost) {
-            this.start = start;
-            this.end = end;
+        public Node(int node, int cost) {
+            this.node = node;
             this.cost = cost;
         }
 
         @Override
-        public int compareTo(Edge o) {
+        public int compareTo(Node o) {
             return this.cost - o.cost;
         }
     }
@@ -34,63 +30,50 @@ public class Main {
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
-        list = new ArrayList<>();
-        p = new int[n];
+        adj = new List[n];
+        for (int i = 0; i < n; i++) {
+            adj[i] = new ArrayList<>();
+        }
+        visited = new boolean[n];
+
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
                 int cost = Integer.parseInt(st.nextToken());
                 if (i >= j) continue;
-                Edge edge = new Edge(i, j, cost);
-                list.add(edge);
+                adj[i].add(new Node(j, cost));
+                adj[j].add(new Node(i, cost));
             }
         }
 
-        Collections.sort(list);
-
-        kruskal();
+        prim();
 
         System.out.println(sum);
 
         br.close();
     }
 
-    public static void kruskal() {
-        makeSet();
-        for (int i = 0; i < list.size(); i++) {
-            Edge edge = list.get(i);
-            int startParent = findSet(edge.start);
-            int endParent = findSet(edge.end);
+    static void prim() {
+        Queue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(0, 0));
 
-            if (startParent != endParent) {
-                union(startParent, endParent);
-                sum += edge.cost;
-                pick++;
+        while (!pq.isEmpty()) {
+            Node cur = pq.poll();
+            if (visited[cur.node]) continue;
+            visited[cur.node] = true;
+            pick++;
+            sum += cur.cost;
+            if (pick == n) break;
+            for (Node next : adj[cur.node]) {
+                if (!visited[next.node]) {
+                    pq.add(new Node(next.node, next.cost));
+                }
             }
 
-            if (pick == n - 1) {
-                break;
-            }
-
         }
+
     }
 
-    public static void union(int x, int y) {
-        p[x] = y;
-    }
-
-    public static int findSet(int x) {
-        if (p[x] != x) {
-            p[x] = findSet(p[x]);
-        }
-        return p[x];
-    }
-
-    public static void makeSet() {
-        for (int i = 0; i < n; i++) {
-            p[i] = i;
-        }
-    }
 
 }
