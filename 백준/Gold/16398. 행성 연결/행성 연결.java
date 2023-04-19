@@ -67,7 +67,7 @@ public class Main {
             if (pick == n) break;
             for (Node next : adj[cur.node]) {
                 if (!visited[next.node]) {
-                    pq.add(new Node(next.node, next.cost));
+                    pq.add(next);
                 }
             }
 
