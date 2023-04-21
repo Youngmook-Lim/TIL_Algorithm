@@ -7,7 +7,6 @@ public class Main {
 
     static int n, m, k, x;
     static List<Integer>[] adj;
-    static boolean[] visited;
     static int[] dist;
     static Queue<Integer> q;
     static List<Integer> ansList;
@@ -27,7 +26,6 @@ public class Main {
         for (int i = 1; i < n + 1; i++) {
             adj[i] = new ArrayList<>();
         }
-        visited = new boolean[n + 1];
         dist = new int[n + 1];
         Arrays.fill(dist, -1);
         q = new ArrayDeque<>();
@@ -37,6 +35,9 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
+            if (adj[a] == null) {
+                adj[a] = new ArrayList<>();
+            }
             adj[a].add(b);
         }
 
@@ -46,15 +47,15 @@ public class Main {
         while (!q.isEmpty()) {
             int cur = q.poll();
 
-            if (visited[cur]) continue;
-            visited[cur] = true;
-
             if (dist[cur] == k) {
                 ansList.add(cur);
             }
+            if (dist[cur] > k) break;
+
+            if (adj[cur] == null) continue;
 
             for (int next : adj[cur]) {
-                if (!visited[next] && dist[next] == -1) {
+                if (dist[next] == -1) {
                     dist[next] = dist[cur] + 1;
                     q.add(next);
                 }
