@@ -5,22 +5,28 @@ import java.util.*;
 
 public class Main {
 
+    static int n, m, k, x;
+    static List<Integer>[] adj;
+    static int[] dist;
+    static Queue<Integer> q;
+    static List<Integer> ansList;
+
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
-        int x = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+        x = Integer.parseInt(st.nextToken());
 
-        List<Integer>[] adj = new List[n + 1];
-        int[] dist = new int[n + 1];
+        adj = new List[n + 1];
+        dist = new int[n + 1];
         Arrays.fill(dist, -1);
-        Queue<Integer> q = new ArrayDeque<>();
-        List<Integer> ansList = new ArrayList<>();
+        q = new ArrayDeque<>();
+        ansList = new ArrayList<>();
 
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
