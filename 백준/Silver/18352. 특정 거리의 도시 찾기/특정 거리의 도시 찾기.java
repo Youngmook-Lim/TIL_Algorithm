@@ -6,28 +6,12 @@ import java.util.*;
 public class Main {
 
     static int n, m, k, x;
-    static List<Node>[] adj;
+    static List<Integer>[] adj;
     static boolean[] visited;
     static int[] dist;
-    static Queue<Node> pq;
+    static Queue<Integer> q;
     static List<Integer> ansList;
 
-    static class Node implements Comparable<Node> {
-        int node, d;
-
-        public Node(int node, int d) {
-            this.node = node;
-            this.d = d;
-        }
-
-        @Override
-        public int compareTo(Node o) {
-            if (this.d != o.d) {
-                return this.d - o.d;
-            }
-            return this.node - o.node;
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -45,44 +29,42 @@ public class Main {
         }
         visited = new boolean[n + 1];
         dist = new int[n + 1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        pq = new PriorityQueue<>();
+        Arrays.fill(dist, -1);
+        q = new ArrayDeque<>();
         ansList = new ArrayList<>();
 
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            adj[a].add(new Node(b, 1));
+            adj[a].add(b);
         }
 
         dist[x] = 0;
-        pq.add(new Node(x, 0));
+        q.add(x);
 
-        while (!pq.isEmpty()) {
-            Node cur = pq.poll();
-            if (visited[cur.node]) continue;
-            visited[cur.node] = true;
+        while (!q.isEmpty()) {
+            int cur = q.poll();
 
-            for (Node next : adj[cur.node]) {
-                if (!visited[next.node] && dist[cur.node] + next.d < dist[next.node]) {
-                    dist[next.node] = dist[cur.node] + next.d;
-                    pq.add(new Node(next.node, dist[next.node]));
-                }
+            if (visited[cur]) continue;
+            visited[cur] = true;
+
+            if (dist[cur] == k) {
+                ansList.add(cur);
             }
-        }
 
-//        System.out.println(Arrays.toString(dist));
-
-        for (int i = 1; i < n + 1; i++) {
-            if (dist[i] == k) {
-                ansList.add(i);
+            for (int next : adj[cur]) {
+                if (!visited[next] && dist[next] == -1) {
+                    dist[next] = dist[cur] + 1;
+                    q.add(next);
+                }
             }
         }
 
         if (ansList.isEmpty()) {
             System.out.println(-1);
         } else {
+            Collections.sort(ansList);
             StringBuilder sb = new StringBuilder();
             for (int num : ansList) {
                 sb.append(num).append('\n');
