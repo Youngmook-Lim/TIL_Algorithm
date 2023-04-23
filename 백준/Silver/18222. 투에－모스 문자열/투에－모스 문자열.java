@@ -30,10 +30,9 @@ public class Main {
             return '0';
         }
         long newTarget = target - num / 2;
-        while (num >= newTarget) {
+        while (num / 2 >= newTarget) {
             num /= 2;
         }
-        num *= 2;
         return (getChar(num, newTarget) == '0' ? '1' : '0');
     }
 
