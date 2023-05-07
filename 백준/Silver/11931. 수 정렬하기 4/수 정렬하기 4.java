@@ -10,18 +10,16 @@ public class Main {
         StringTokenizer st;
 
         int n = Integer.parseInt(br.readLine());
-        List<Integer> list = new ArrayList<>();
-
+        int[] arr = new int[2_000_001];
         for (int i = 0; i < n; i++) {
-            list.add(Integer.parseInt(br.readLine()));
+            arr[Integer.parseInt(br.readLine()) + 1_000_000]++;
         }
 
-        Collections.sort(list);
-
         StringBuilder sb = new StringBuilder();
-
-        for (int i = list.size() - 1; i >= 0; i--) {
-            sb.append(list.get(i)).append('\n');
+        for (int i = 2_000_000; i >= 0; i--) {
+            if (arr[i] != 0) {
+                sb.append(i - 1_000_000).append('\n');
+            }
         }
 
         System.out.println(sb);
