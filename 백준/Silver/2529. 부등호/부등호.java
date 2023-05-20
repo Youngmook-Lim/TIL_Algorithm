@@ -10,6 +10,7 @@ public class Main {
     static char[] arr;
     static boolean[] visited;
     static List<Integer> list;
+    static boolean flag;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,7 +27,10 @@ public class Main {
             arr[i] = st.nextToken().charAt(0);
         }
 
-        dfs(0);
+        flag = false;
+        dfsMax(0);
+        flag = false;
+        dfsMin(0);
 
         System.out.printf(String.format("%%0%dd", k + 1), max);
         System.out.println();
@@ -45,9 +49,43 @@ public class Main {
         min = Math.min(min, tmp);
     }
 
-    static void dfs(int depth) {
+    static void dfsMax(int depth) {
+        if (flag) return;
+
         if (depth == k + 1) {
             calculate();
+            flag = true;
+            return;
+        }
+
+        for (int i = 9; i >= 0; i--) {
+            if (visited[i]) continue;
+            boolean result = false;
+            if (depth != 0) {
+                char symbol = arr[depth - 1];
+                if (symbol == '>') {
+                    result = list.get(depth - 1) > i;
+                } else {
+                    result = list.get(depth - 1) < i;
+                }
+            }
+
+            if (depth == 0 || result) {
+                list.add(i);
+                visited[i] = true;
+                dfsMax(depth + 1);
+                visited[i] = false;
+                list.remove(list.size() - 1);
+            }
+        }
+    }
+
+    static void dfsMin(int depth) {
+        if (flag) return;
+
+        if (depth == k + 1) {
+            calculate();
+            flag = true;
             return;
         }
 
@@ -66,7 +104,7 @@ public class Main {
             if (depth == 0 || result) {
                 list.add(i);
                 visited[i] = true;
-                dfs(depth + 1);
+                dfsMin(depth + 1);
                 visited[i] = false;
                 list.remove(list.size() - 1);
             }
