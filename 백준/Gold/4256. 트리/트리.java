@@ -7,7 +7,7 @@ public class Main {
 
     static int T;
     static int n;
-    static int[] pre, in;
+    static int[] pre, in, inPos;
     static int idx;
     static StringBuilder sb = new StringBuilder();
 
@@ -21,6 +21,7 @@ public class Main {
             n = Integer.parseInt(br.readLine());
             pre = new int[n];
             in = new int[n];
+            inPos = new int[n + 1];
             idx = 0;
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < n; i++) {
@@ -29,6 +30,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < n; i++) {
                 in[i] = Integer.parseInt(st.nextToken());
+                inPos[in[i]] = i;
             }
 
             getPost(0, n - 1, 0);
@@ -47,7 +49,7 @@ public class Main {
         if (idx >= n) return;
 
         int target = pre[targetIdx];
-        int pos = findIdx(target);
+        int pos = inPos[target];
         if (start <= pos - 1) {
             getPost(start, pos - 1, ++idx);
         }
@@ -55,15 +57,6 @@ public class Main {
             getPost(pos + 1, end, ++idx);
         }
         sb.append(target).append(' ');
-    }
-
-    static int findIdx(int target) {
-        for (int i = 0; i < n; i++) {
-            if (in[i] == target) {
-                return i;
-            }
-        }
-        return -1;
     }
 
 
