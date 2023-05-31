@@ -44,18 +44,16 @@ public class Main {
     }
 
     static void getPost(int start, int end, int targetIdx) {
-//        System.out.println(start + " " + end);
         if (idx >= n) return;
-        if (start > end) {
-            idx--;
-            return;
-        }
 
         int target = pre[targetIdx];
         int pos = findIdx(target);
-//        System.out.println(pos);
-        getPost(start, pos - 1, ++idx);
-        getPost(pos + 1, end, ++idx);
+        if (start <= pos - 1) {
+            getPost(start, pos - 1, ++idx);
+        }
+        if (pos + 1 <= end) {
+            getPost(pos + 1, end, ++idx);
+        }
         sb.append(target).append(' ');
     }
 
