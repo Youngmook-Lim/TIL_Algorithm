@@ -33,7 +33,11 @@ public class Main {
                     j--;
                 }
             }
-            max = Math.max(max, cnt);
+            if (cnt >= max) {
+                max = cnt;
+            } else {
+                break;
+            }
         }
 
         System.out.println(max);
