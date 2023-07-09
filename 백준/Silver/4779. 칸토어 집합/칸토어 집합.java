@@ -24,7 +24,7 @@ class Main {
                 }
 
                 recur(0, size);
-                
+
                 for (char x : arr) {
                     sb.append(x);
                 }
@@ -45,8 +45,10 @@ class Main {
 
         if (len == 1) return;
 
-        int left = start + len / 3;
-        int right = end - len / 3;
+        len /= 3;
+
+        int left = start + len;
+        int right = end - len;
 
         for (int i = left; i < right; i++) {
             arr[i] = ' ';
