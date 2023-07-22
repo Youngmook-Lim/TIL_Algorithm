@@ -15,10 +15,10 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
-        w = new int[n];
-        v = new int[n];
+        w = new int[n + 1];
+        v = new int[n + 1];
         dp = new int[n + 1][k + 1];
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i < n + 1; i++) {
             st = new StringTokenizer(br.readLine());
             w[i] = Integer.parseInt(st.nextToken());
             v[i] = Integer.parseInt(st.nextToken());
@@ -27,15 +27,16 @@ public class Main {
         for (int i = 1; i < n + 1; i++) {
             for (int j = 1; j < k + 1; j++) {
 
-                dp[i][j] = dp[i - 1][j];
-                if (j >= w[i - 1]) {
-                    dp[i][j] = Integer.max(dp[i][j], v[i - 1] + dp[i - 1][j - w[i - 1]]);
+                if (j >= w[i]) {
+                    dp[i][j] = Integer.max(dp[i - 1][j], v[i] + dp[i - 1][j - w[i]]);
+                } else {
+                    dp[i][j] = dp[i - 1][j];
                 }
             }
         }
 
         System.out.println(dp[n][k]);
-        
+
     }
 }
 
