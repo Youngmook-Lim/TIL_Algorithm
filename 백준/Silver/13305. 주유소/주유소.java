@@ -9,42 +9,30 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int[] distance = new int[n];
+        int[] distance = new int[n - 1];
         int[] price = new int[n];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n - 1; i++) {
             distance[i] = Integer.parseInt(st.nextToken());
         }
-
-        for (int i = 1; i < n; i++) {
-            distance[i] += distance[i - 1];
-        }
-
-
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             price[i] = Integer.parseInt(st.nextToken());
         }
 
-        long min = price[0];
-        int idx = 0;
-        long total = 0;
+        int min = price[0];
+        int total = price[0] * distance[0];
 
-        for (int i = 0; i < n; i++) {
-            if (price[i] < min) {
-                int totalDist = distance[i] - distance[idx];
-                total += totalDist * min;
+        for (int i = 1; i < n - 1; i++) {
+            if (min > price[i]) {
                 min = price[i];
-                idx = i;
             }
-            if (i == n - 1) {
-                int totalDist = distance[i] - distance[idx];
-                total += totalDist * min;
-            }
+            total += min * distance[i];
         }
 
         System.out.println(total);
+
 
         br.close();
     }
