@@ -14,17 +14,15 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         c = Integer.parseInt(st.nextToken());
-        int start = Integer.MAX_VALUE;
+        int start = 1;
         int end = 0;
 
         arr = new int[n];
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
-            if (i != 0) {
-                if (start > arr[i] - arr[i - 1]) {
-                    start = arr[i] - arr[i - 1];
-                }
-            }
+//            if (start > arr[i]) {
+//                start = arr[i];
+//            }
         }
 
         Arrays.sort(arr);
@@ -37,12 +35,17 @@ public class Main {
             int idx = 0;
             int total = 0;
             for (int i = 1; i < n; i++) {
+
                 total = arr[i] - arr[idx];
                 if (total >= mid) {
                     cnt++;
                     idx = i;
+                    total = 0;
                 }
             }
+
+
+//            System.out.println(start + " " + mid + " " + end + ": " + cnt);
 
             if (cnt < c) {
                 end = mid - 1;
@@ -53,8 +56,12 @@ public class Main {
 
         System.out.println(end);
 
+
         br.close();
 
     }
 
 }
+
+
+
