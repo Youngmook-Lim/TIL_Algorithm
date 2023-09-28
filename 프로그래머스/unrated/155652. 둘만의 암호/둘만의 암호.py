@@ -4,10 +4,13 @@ def solution(s, skip, index):
     for char in skip:
         alphabet.remove(char)
     
+    dic = {}
+    for i, char in enumerate(alphabet):
+        dic[char] = i
+    
     answer = ''
     
     for x in s:
-        idx = alphabet.index(x)
-        answer += alphabet[(idx + index) % len(alphabet)]
+        answer += alphabet[(dic[x] + index) % len(alphabet)]
         
     return answer
