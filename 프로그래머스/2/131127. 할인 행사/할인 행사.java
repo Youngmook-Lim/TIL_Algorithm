@@ -19,12 +19,12 @@ class Solution {
         
         if (check(number)) answer++;
         
-        for (int i = 1; i < discount.length - 9; i++) {
-            if (map.containsKey(discount[i - 1])) {
-                number[map.get(discount[i - 1])]++;
+        for (int i = 0; i < discount.length - 10; i++) {
+            if (map.containsKey(discount[i])) {
+                number[map.get(discount[i])]++;
             }
-            if (map.containsKey(discount[i + 9])) {
-                number[map.get(discount[i + 9])]--;
+            if (map.containsKey(discount[i + 10])) {
+                number[map.get(discount[i + 10])]--;
             }
             if (check(number)) answer++;
         }
