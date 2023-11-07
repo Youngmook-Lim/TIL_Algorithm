@@ -9,9 +9,7 @@ class Solution {
         map = new HashMap<>();
         
         for (String[] arr : clothes) {
-            String item = arr[0];
-            String type = arr[1];
-            
+            String type = arr[1];            
             map.put(type, map.getOrDefault(type, 0) + 1);
         }
         
