@@ -7,6 +7,10 @@ class Solution {
     
     public int solution(int cacheSize, String[] cities) {
         
+        if (cacheSize == 0) {
+            return cities.length * 5;
+        }
+        
         int answer = 0;
         queue = new LinkedList<>();
         set = new HashSet<>();
@@ -19,14 +23,13 @@ class Solution {
                 queue.add(x);
                 answer++;
             } else {
-                if (cacheSize > 0) {
-                    if (set.size() >= cacheSize) {
-                        String d = queue.poll();
-                        set.remove(d);
-                    } 
-                    queue.add(x);
-                    set.add(x);
-                }
+                if (set.size() >= cacheSize) {
+                    String d = queue.poll();
+                    set.remove(d);
+                } 
+                queue.add(x);
+                set.add(x);
+                
                 answer += 5;
             }
         }
