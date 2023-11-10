@@ -2,57 +2,27 @@ import java.util.*;
 
 class Solution {
     
-    public class P implements Comparable<P> {
-        int n;
-        int cnt;
-        
-        public P(int n, int cnt) {
-            this.n = n;
-            this.cnt = cnt;
-        }
-        
-        @Override
-        public int compareTo(P o) {
-            return o.cnt - this.cnt;
-        }
-    }
-    
     public int[] solution(String s) {
         
-        HashMap<String, Integer> map = new HashMap<>();
-        List<P> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
         
-        String[] arr1 = s.split("},\\{");
+        String[] arr = s.replaceAll("[{]", " ").replaceAll("[}]", " ").trim().split(" , ");
+        Arrays.sort(arr, (a, b) -> {
+            return a.length() - b.length();
+        });
         
-        for (int i = 0; i < arr1.length; i++) {
-            String tmp = arr1[i];
-            String cur = tmp;
-            
-            if (i == 0) {
-                cur = cur.substring(2, cur.length());
-            } 
-            
-            if (i == arr1.length - 1) {
-                cur = cur.substring(0, cur.length() - 2);
-            } 
-            
-            String[] arr2 = cur.split("\\,");
-            for (String x : arr2) {
-                map.put(x, map.getOrDefault(x, 0) + 1);
+        int[] answer = new int[arr.length];
+        
+        int idx = 0;
+        
+        for(String s1 : arr) {
+            for(String s2 : s1.split(",")) {
+                if(!set.contains(s2)) {
+                    set.add(s2);
+                    answer[idx++] = Integer.parseInt(s2);
+                }
             }
         }
-        
-        for (String x : map.keySet()) {
-            list.add(new P(Integer.parseInt(x), map.get(x)));
-        }
-        
-        Collections.sort(list);
-                
-        int[] answer = new int[list.size()];
-        for (int i = 0; i < answer.length; i++) {
-            answer[i] = list.get(i).n;
-        }
-
         return answer;
     }
 }
