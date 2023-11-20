@@ -6,57 +6,53 @@ class Solution {
     Map<String, Integer> map1;
     Map<String, Integer> map2;
     Map<String, Integer> totalMap; 
+    int size1;
+    int size2;
+    double intersection;
+    double union;
     
     public int solution(String str1, String str2) {
         
         map1 = new HashMap<>();
         map2 = new HashMap<>();
-        int size1 = 0;
-        int size2 = 0;
-        
-        for (int i = 0; i < str1.length() - 1; i++) {
-            String tmp = str1.substring(i, i + 2).toLowerCase();
-            if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'z' || tmp.charAt(1) < 'a' || tmp.charAt(1) > 'z') continue;
-            map1.put(tmp, map1.getOrDefault(tmp, 0) + 1);
-            size1++;
-        }
-        
-        for (int i = 0; i < str2.length() - 1; i++) {
-            String tmp = str2.substring(i, i + 2).toLowerCase();
-            if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'z' || tmp.charAt(1) < 'a' || tmp.charAt(1) > 'z') continue;
-            map2.put(tmp, map2.getOrDefault(tmp, 0) + 1);
-            size2++;
-        }
-        
-        double intersection = size1 < size2 ? getIntersection(map1, map2) : getIntersection(map2, map1);
-        
         totalMap = new HashMap<>();
+        size1 = 0;
+        size2 = 0;
+        union = 0;
         
-        for (String x : map1.keySet()) {
-            if (totalMap.containsKey(x)) {
-                totalMap.put(x, Math.max(totalMap.get(x), map1.get(x)));
-            } else {
-                totalMap.put(x, map1.get(x));                
-            }
-        }
+        fillMap(str1, map1, size1);
+        fillMap(str2, map2, size2);
         
-        for (String x : map2.keySet()) {
-            if (totalMap.containsKey(x)) {
-                totalMap.put(x, Math.max(totalMap.get(x), map2.get(x)));
-            } else {
-                totalMap.put(x, map2.get(x));                
-            }
-        }
+        intersection = size1 < size2 ? getIntersection(map1, map2) : getIntersection(map2, map1);
         
-        double union = 0;
+        fillTotalMap(map1);
+        fillTotalMap(map2);
+                
         for (Integer x : totalMap.values()) {
             union += x;
         }
         
-        if (union == 0) {
-            return MULTIPLIER;
-        } else {
-            return (int) ((intersection / union) * MULTIPLIER);
+        double answer = union == 0 ? 1 : intersection / union;
+        
+        return (int) (answer * MULTIPLIER);
+    }
+    
+    public void fillTotalMap(Map<String, Integer> map) {
+        for (String x : map.keySet()) {
+            if (totalMap.containsKey(x)) {
+                totalMap.put(x, Math.max(totalMap.get(x), map.get(x)));
+            } else {
+                totalMap.put(x, map.get(x));                
+            }
+        }
+    }
+    
+    public void fillMap(String str, Map<String, Integer> map, int size) {
+        for (int i = 0; i < str.length() - 1; i++) {
+            String tmp = str.substring(i, i + 2).toLowerCase();
+            if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'z' || tmp.charAt(1) < 'a' || tmp.charAt(1) > 'z') continue;
+            map.put(tmp, map.getOrDefault(tmp, 0) + 1);
+            size++;
         }
     }
     
