@@ -1,70 +1,59 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Main{
+	static int n,m,a,b;
+	static ArrayList<Integer>[] list;
+	static boolean visit [];
+	static int depth[];
+	static int max;
+	
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st=new StringTokenizer(br.readLine());
+		n=Integer.parseInt(st.nextToken());
+		m=Integer.parseInt(st.nextToken());
+		list=new ArrayList[n+1];
+		for(int i=1;i<=n;i++) {
+			list[i]=new ArrayList<Integer>();
+		}
+		for(int i=0;i<m;i++) {
+			st=new StringTokenizer(br.readLine());
+			a=Integer.parseInt(st.nextToken());
+			b=Integer.parseInt(st.nextToken());
+			list[a].add(b);
+		}
+		depth=new int[n+1];
+		
+		for(int i=1;i<=n;i++) {
+			visit=new boolean[n+1];
+			Queue <Integer>queue=new LinkedList<Integer>();
+			queue.add(i);
+			visit[i]=true;
+			while(!queue.isEmpty()) {
+				int n=queue.poll();
+				for(int date:list[n]) {
+					if(!visit[date]) {
+						queue.add(date);
+						visit[date]=true;
+						depth[date]++;
+					}
+					
+				}
+			}
 
-    static int n, m;
-    static List<Integer>[] list;
-    static boolean[] visited;
-    static int[] ans;
-    static int max;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-
-        list = new ArrayList[n + 1];
-
-        for (int i = 0; i < n + 1; i++) {
-            list[i] = new ArrayList<>();
-        }
-
-        for (int i = 0; i < m; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            list[a].add(b);
-        }
-
-        ans = new int[n + 1];
-        max = 0;
-        for (int i = 1; i < n + 1; i++) {
-            visited = new boolean[n + 1];
-            dfs(i);
-        }
-
-        for (int i = 1; i < n + 1; i++) {
-            max = Math.max(max, ans[i]);
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 1; i < n + 1; i++) {
-            if (ans[i] == max) {
-                sb.append(i + " ");
-            }
-        }
-
-        bw.write(sb.toString());
-
-        bw.flush();
-        bw.close();
-        br.close();
-    }
-
-    static void dfs(int start) {
-        visited[start] = true;
-
-        for (int x : list[start]) {
-            if (!visited[x]) {
-                ans[x]++;
-                dfs(x);
-            }
-        }
-    }
-
+		}
+		max=0;
+		for(int date:depth) {
+			max=Math.max(max, date);
+		}
+		StringBuilder sb=new StringBuilder();
+		for(int i=1;i<=n;i++) {
+			if(depth[i]==max) {
+				sb.append(i+" ");
+			}
+		}
+		System.out.println(sb);		
+	}
 }
