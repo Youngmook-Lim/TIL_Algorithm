@@ -1,0 +1,9 @@
+-- 코드를 작성해주세요
+SELECT COUNT(*) AS FISH_COUNT, MAX(LENGTH) AS MAX_LENGTH, FISH_TYPE
+FROM FISH_INFO F
+GROUP BY FISH_TYPE
+HAVING (SUM(LENGTH) + 10 * (SELECT COUNT(*) 
+                            FROM FISH_INFO FF
+                            WHERE FF.LENGTH IS NULL 
+                            AND FF.FISH_TYPE = F.FISH_TYPE)) / COUNT(*)>= 33
+ORDER BY FISH_TYPE;
