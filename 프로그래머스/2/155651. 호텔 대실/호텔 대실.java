@@ -18,10 +18,6 @@ class Solution {
             return t.start - this.start;
         }
         
-        @Override
-        public String toString() {
-            return (start / 60) + ":" + (start - (start / 60) * 60)  + " ~ " + (end / 60) + ":" + (end - (end / 60) * 60);
-        }
     }
     
     public int solution(String[][] book_time) {
@@ -45,14 +41,12 @@ class Solution {
                 if (t.end + 10 <= r.start) {
                     res.set(i, t);
                     flag = true;
-                    // System.out.println("replaced : " + r + " with " + t);
                     break;
                 }
             }
             
             if (!flag) {
                 res.add(t);
-                // System.out.println("added : " + t);
             }
             
         }
